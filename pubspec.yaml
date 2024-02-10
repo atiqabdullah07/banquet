@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_screenutil: ^5.9.0
   flutter_easyloading: ^3.0.5
+  another_carousel_pro: ^1.0.2
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,6 @@
 import 'package:banquet/App%20Constants/constants.dart';
+import 'package:banquet/Views/Pages/Customer/hall_details.dart';
+import 'package:banquet/Views/Widgets/common_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -103,7 +105,7 @@ class CustomerDashboard extends StatelessWidget {
                                   hintStyle: TextStyle(
                                       color: AppColors.black.withOpacity(0.2),
                                       fontSize: 16),
-                                  hintText: "Search..."),
+                                  hintText: "Search Banquet..."),
                             ),
                           ),
                         ),
@@ -158,15 +160,9 @@ class CustomerDashboard extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.only(left: 20.w),
-                child: const Row(
+                child: Row(
                   children: [
-                    Text(
-                      'Services',
-                      style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.black),
-                    ),
+                    titleText(title: 'Services'),
                   ],
                 ),
               ),
@@ -214,104 +210,104 @@ class CustomerDashboard extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.only(left: 20.w),
-                child: const Row(
-                  children: [
-                    Text(
-                      'Popular Halls',
-                      style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.black),
-                    ),
-                  ],
+                child: Row(
+                  children: [titleText(title: 'Popular Halls')],
                 ),
               ),
               SizedBox(
                 height: 5.h,
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 2,
-                child: ListView.builder(
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      child: Container(
-                        height: 120,
-                        width: 400,
-                        decoration: BoxDecoration(
-                          color: AppColors.primaryColor,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Row(children: [
-                          Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Container(
-                              height: 100,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                image: const DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: NetworkImage(
-                                        'https://i.pinimg.com/originals/85/7a/bc/857abcdd95af8530c9d022f5cb420932.png')),
-                                color: AppColors.backgroundColor,
-                                borderRadius: BorderRadius.circular(10),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HallDetails()));
+                },
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height / 2,
+                  child: ListView.builder(
+                    itemCount: 3,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: Container(
+                          height: 120,
+                          width: 400,
+                          decoration: BoxDecoration(
+                            color: AppColors.primaryColor,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Row(children: [
+                            Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Container(
+                                height: 100,
+                                width: 100,
+                                decoration: BoxDecoration(
+                                  image: const DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: NetworkImage(
+                                          'https://i.pinimg.com/originals/85/7a/bc/857abcdd95af8530c9d022f5cb420932.png')),
+                                  color: AppColors.backgroundColor,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 5.w,
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Mashallah Halls',
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white),
-                              ),
-                              SizedBox(
-                                height: 5.h,
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.star,
-                                    size: 24.r,
-                                    color: Colors.yellow,
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    size: 24.r,
-                                    color: Colors.yellow,
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    size: 24.r,
-                                    color: Colors.yellow,
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    size: 24.r,
-                                    color: Colors.yellow,
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    size: 24.r,
-                                    color: Colors.yellow,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          )
-                        ]),
-                      ),
-                    );
-                  },
+                            SizedBox(
+                              width: 5.w,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Mashallah Halls',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white),
+                                ),
+                                SizedBox(
+                                  height: 5.h,
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.star,
+                                      size: 24.r,
+                                      color: Colors.yellow,
+                                    ),
+                                    Icon(
+                                      Icons.star,
+                                      size: 24.r,
+                                      color: Colors.yellow,
+                                    ),
+                                    Icon(
+                                      Icons.star,
+                                      size: 24.r,
+                                      color: Colors.yellow,
+                                    ),
+                                    Icon(
+                                      Icons.star,
+                                      size: 24.r,
+                                      color: Colors.yellow,
+                                    ),
+                                    Icon(
+                                      Icons.star,
+                                      size: 24.r,
+                                      color: Colors.yellow,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            )
+                          ]),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               )
             ],

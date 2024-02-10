@@ -8,6 +8,7 @@ void main() {
       designSize: const Size(393, 852),
       builder: (context, child) {
         return const MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'Banquet',
           home: Home(),
         );
