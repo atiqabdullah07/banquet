@@ -1,4 +1,4 @@
-import 'package:banquet/Views/Pages/home.dart';
+import 'package:banquet/Views/Screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

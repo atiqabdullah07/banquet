@@ -1,5 +1,5 @@
 import 'package:banquet/App%20Constants/constants.dart';
-import 'package:banquet/Views/Pages/Customer/customer_dashboard.dart';
+import 'package:banquet/Views/Screens/Customer/customer_dashboard.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {

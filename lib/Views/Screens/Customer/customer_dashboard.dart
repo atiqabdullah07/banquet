@@ -1,5 +1,5 @@
 import 'package:banquet/App%20Constants/constants.dart';
-import 'package:banquet/Views/Pages/Customer/hall_details.dart';
+import 'package:banquet/Views/Screens/Customer/Hall%20Details/hall_details.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
