@@ -1,5 +1,6 @@
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/Views/Screens/Customer/customer_dashboard.dart';
+import 'package:banquet/Views/Screens/Customer/My%20Profile/my_profile.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -17,9 +18,7 @@ class _HomeState extends State<Home> {
     const Center(
       child: Text('Chats'),
     ),
-    const Center(
-      child: Text('Profile'),
-    ),
+    const MyProfile(),
   ];
 
   @override
@@ -29,10 +28,10 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         elevation: 10,
+        currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
         selectedItemColor: AppColors.primaryColor,
         unselectedItemColor: AppColors.black.withOpacity(0.5),
-        currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
             _currentIndex = index;
