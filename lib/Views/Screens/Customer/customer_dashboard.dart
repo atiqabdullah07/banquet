@@ -1,4 +1,6 @@
 import 'package:banquet/App%20Constants/constants.dart';
+import 'package:banquet/Views/Screens/Customer/Events/events.dart';
+
 import 'package:banquet/Views/Screens/Customer/Hall%20Details/hall_details.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +11,6 @@ class CustomerDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, String>> services = [
-      {'icon': 'assets/icons/events.png', 'title': 'Events'},
-      {'icon': 'assets/icons/Free Food.png', 'title': 'Free Food'},
-      {'icon': 'assets/icons/Recomendations.png', 'title': 'Recomendation'},
-    ];
-
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.backgroundColor,
@@ -93,13 +89,7 @@ class CustomerDashboard extends StatelessWidget {
                             padding: EdgeInsets.symmetric(horizontal: 25.w),
                             child: TextField(
                               readOnly: true,
-                              onTap: () {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //       builder: (context) => const Search()),
-                                // );
-                              },
+                              onTap: () {},
                               decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintStyle: TextStyle(
@@ -169,41 +159,26 @@ class CustomerDashboard extends StatelessWidget {
               SizedBox(
                 height: 5.h,
               ),
-              SizedBox(
-                height: 110.h,
-                width: MediaQuery.of(context).size.width,
-                child: ListView.builder(
-                  itemCount: services.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 75.h,
-                            width: 75.w,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage(
-                                      services[index]['icon'].toString())),
-                              color: AppColors.secondaryColor,
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5.h,
-                          ),
-                          Text(
-                            services[index]['title'].toString(),
-                            style: const TextStyle(
-                                fontSize: 15, color: AppColors.black),
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                ),
+              Row(
+                children: [
+                  servicesButton(
+                      icon: 'assets/icons/events.png',
+                      title: 'Events',
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Events()));
+                      }),
+                  servicesButton(
+                      icon: 'assets/icons/Free Food.png',
+                      title: 'Foods',
+                      onTap: () {}),
+                  servicesButton(
+                      icon: 'assets/icons/Recomendations.png',
+                      title: 'Recomendations',
+                      onTap: () {}),
+                ],
               ),
               SizedBox(
                 height: 10.h,
@@ -217,102 +192,55 @@ class CustomerDashboard extends StatelessWidget {
               SizedBox(
                 height: 5.h,
               ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HallDetails()));
-                },
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height / 2,
-                  child: ListView.builder(
-                    itemCount: 3,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                        child: Container(
-                          height: 120,
-                          width: 400,
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryColor,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Row(children: [
-                            Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: Container(
-                                height: 100,
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  image: const DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: NetworkImage(
-                                          'https://i.pinimg.com/originals/85/7a/bc/857abcdd95af8530c9d022f5cb420932.png')),
-                                  color: AppColors.backgroundColor,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 5.w,
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Mashallah Halls',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white),
-                                ),
-                                SizedBox(
-                                  height: 5.h,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.star,
-                                      size: 24.r,
-                                      color: Colors.yellow,
-                                    ),
-                                    Icon(
-                                      Icons.star,
-                                      size: 24.r,
-                                      color: Colors.yellow,
-                                    ),
-                                    Icon(
-                                      Icons.star,
-                                      size: 24.r,
-                                      color: Colors.yellow,
-                                    ),
-                                    Icon(
-                                      Icons.star,
-                                      size: 24.r,
-                                      color: Colors.yellow,
-                                    ),
-                                    Icon(
-                                      Icons.star,
-                                      size: 24.r,
-                                      color: Colors.yellow,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            )
-                          ]),
-                        ),
-                      );
-                    },
-                  ),
+              SizedBox(
+                height: 1.sh / 2,
+                child: ListView.builder(
+                  itemCount: 3,
+                  itemBuilder: (context, index) {
+                    return hallCards(onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HallDetails()));
+                    });
+                  },
                 ),
               )
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Padding servicesButton(
+      {required String icon,
+      required String title,
+      required VoidCallback onTap}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: onTap,
+            child: Container(
+              height: 75.h,
+              width: 75.w,
+              decoration: BoxDecoration(
+                image: DecorationImage(image: AssetImage(icon)),
+                color: AppColors.secondaryColor,
+                borderRadius: BorderRadius.circular(100),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 5.h,
+          ),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 15, color: AppColors.black),
+          )
+        ],
       ),
     );
   }

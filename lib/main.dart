@@ -1,4 +1,5 @@
-import 'package:banquet/Views/Screens/home.dart';
+import 'package:banquet/Views/Screens/Auth/select_categorey.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -10,7 +11,7 @@ void main() {
         return const MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Banquet',
-          home: Home(),
+          home: CategoreyPage(),
         );
       }));
 }

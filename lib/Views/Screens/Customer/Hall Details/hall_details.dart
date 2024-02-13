@@ -19,108 +19,106 @@ class HallDetails extends StatelessWidget {
       NetworkImage(
           'https://as2.ftcdn.net/v2/jpg/04/20/23/09/1000_F_420230923_agogDJLHbUh7mkM9JycKwPjfpJWBcjd2.jpg')
     ];
-    return SafeArea(
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        backgroundColor: AppColors.backgroundColor,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 250.h,
-                width: double.infinity,
-                child: AnotherCarousel(
-                  images: images,
-                  dotBgColor: Colors.transparent,
-                  dotIncreasedColor: AppColors.primaryColor,
-                ),
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      backgroundColor: AppColors.backgroundColor,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 250.h,
+              width: double.infinity,
+              child: AnotherCarousel(
+                images: images,
+                dotBgColor: Colors.transparent,
+                dotIncreasedColor: AppColors.primaryColor,
               ),
-              SizedBox(
-                height: 10.h,
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  titleText(title: 'Mehria Marquee'),
+                  subTitleText(title: 'Description'),
+                  Text(
+                    'Come to Mehria Marquee & Events for all your special occasions, For us no event is big or small, Our aim is to make sure its memorable.',
+                    style: TextStyle(color: AppColors.black.withOpacity(0.7)),
+                  ),
+                  SizedBox(
+                    height: 5.h,
+                  ),
+                  subTitleText(title: 'Details'),
+                  Row(
+                    children: [
+                      hallDetailsCard(
+                          icon: 'assets/icons/type.png',
+                          title: 'Type',
+                          value: 'Marquee'),
+                      SizedBox(
+                        width: 10.w,
+                      ),
+                      hallDetailsCard(
+                          icon: 'assets/icons/parking.png',
+                          title: 'Parking',
+                          value: '100 Cars'),
+                      SizedBox(
+                        width: 10.w,
+                      ),
+                      hallDetailsCard(
+                          icon: 'assets/icons/capacity.png',
+                          title: 'Capacity',
+                          value: '1500'),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Row(
+                    children: [
+                      hallDetailsCard(
+                          title: 'Booking Price', value: 'Pkr 20000 - 30000'),
+                      SizedBox(
+                        width: 10.w,
+                      ),
+                      hallDetailsCard(
+                          title: 'Facilties', value: 'Decoration, Studio'),
+                      SizedBox(
+                        width: 10.w,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  subTitleText(title: 'Menu'),
+                  const Menu(),
+                  const Menu(),
+                  const Menu(),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    titleText(title: 'Mehria Marquee'),
-                    subTitleText(title: 'Description'),
-                    Text(
-                      'Come to Mehria Marquee & Events for all your special occasions, For us no event is big or small, Our aim is to make sure its memorable.',
-                      style: TextStyle(color: AppColors.black.withOpacity(0.7)),
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    subTitleText(title: 'Details'),
-                    Row(
-                      children: [
-                        hallDetailsCard(
-                            icon: 'assets/icons/type.png',
-                            title: 'Type',
-                            value: 'Marquee'),
-                        SizedBox(
-                          width: 10.w,
-                        ),
-                        hallDetailsCard(
-                            icon: 'assets/icons/parking.png',
-                            title: 'Parking',
-                            value: '100 Cars'),
-                        SizedBox(
-                          width: 10.w,
-                        ),
-                        hallDetailsCard(
-                            icon: 'assets/icons/capacity.png',
-                            title: 'Capacity',
-                            value: '1500'),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Row(
-                      children: [
-                        hallDetailsCard(
-                            title: 'Booking Price', value: 'Pkr 20000 - 30000'),
-                        SizedBox(
-                          width: 10.w,
-                        ),
-                        hallDetailsCard(
-                            title: 'Facilties', value: 'Decoration, Studio'),
-                        SizedBox(
-                          width: 10.w,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    subTitleText(title: 'Menu'),
-                    const Menu(),
-                    const Menu(),
-                    const Menu(),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 10.h,
-              ),
-              appButton(
-                  title: 'Continue Booking',
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ConfirmBooking()));
-                  }),
-              const SizedBox(
-                height: 100,
-              )
-            ],
-          ),
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            appButton(
+                title: 'Continue Booking',
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ConfirmBooking()));
+                }),
+            const SizedBox(
+              height: 100,
+            )
+          ],
         ),
       ),
     );
