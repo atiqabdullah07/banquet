@@ -17,7 +17,7 @@ class HallDetails extends StatelessWidget {
       NetworkImage(
           'https://www.arabiaweddings.com/sites/default/files/styles/max980/public/articles/2018/02/sharjah_wedding_halls.jpg?itok=9VGejPRc'),
       NetworkImage(
-          'https://as2.ftcdn.net/v2/jpg/04/20/23/09/1000_F_420230923_agogDJLHbUh7mkM9JycKwPjfpJWBcjd2.jpg')
+          'https://www.jaypeehotels.com/blog/wp-content/uploads/2020/07/JGGR-Banquets-1024x699-1.jpg')
     ];
     return Scaffold(
       extendBodyBehindAppBar: true,

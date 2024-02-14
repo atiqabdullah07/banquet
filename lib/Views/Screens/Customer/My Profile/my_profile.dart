@@ -15,6 +15,7 @@ class MyProfile extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: AppColors.backgroundColor,
         title: const Text('Profile'),
         centerTitle: true,
