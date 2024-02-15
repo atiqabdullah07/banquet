@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:banquet/Controller%20Binding/controller_binding.dart';
+import 'package:banquet/Views/Screens/Auth/login.dart';
 import 'package:banquet/Views/Screens/Auth/select_categorey.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -28,11 +29,10 @@ void main() async {
       designSize: const Size(393, 852),
       builder: (context, child) {
         return GetMaterialApp(
-          initialBinding: ControllerBinding(),
-          debugShowCheckedModeBanner: false,
-          builder: EasyLoading.init(),
-          title: 'Banquet',
-          home: const CategoreyPage(),
-        );
+            initialBinding: ControllerBinding(),
+            debugShowCheckedModeBanner: false,
+            builder: EasyLoading.init(),
+            title: 'Banquet',
+            home: const CategoreyPage());
       }));
 }

@@ -18,7 +18,7 @@ class _HomeState extends State<Home> {
     const Center(
       child: Text('Chats'),
     ),
-    const MyProfile(),
+    MyProfile(),
   ];
 
   @override

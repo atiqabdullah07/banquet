@@ -1,9 +1,10 @@
-import 'package:get/get_instance/src/bindings_interface.dart';
+import 'package:banquet/Controllers/auth_controller.dart';
+import 'package:get/get.dart';
 
 class ControllerBinding extends Bindings {
   @override
   void dependencies() {
-    // Get.put(VideoController());
+    Get.put(AuthController());
     // Get.put(CommentsController());
     // Get.put(ProfileController());
   }
