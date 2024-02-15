@@ -2,6 +2,7 @@ import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/Views/Screens/Auth/auth_widgets.dart';
 import 'package:banquet/Views/Screens/Auth/login.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -10,6 +11,25 @@ class CategoreyPage extends StatefulWidget {
 
   @override
   State<CategoreyPage> createState() => _CategoreyPageState();
+}
+
+Future<void> addDummyData() async {
+  print('Function Called');
+  try {
+    // Get a reference to the Firestore database
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    // Add dummy data to a collection (replace 'dummyCollection' with your collection name)
+    await firestore.collection('dummyCollection').add({
+      'name': 'John Doe',
+      'age': 25,
+      'city': 'Example City',
+    });
+
+    print('Dummy data added successfully!');
+  } catch (e) {
+    print('Error adding dummy data: $e');
+  }
 }
 
 class _CategoreyPageState extends State<CategoreyPage> {
@@ -69,23 +89,25 @@ class _CategoreyPageState extends State<CategoreyPage> {
             title: "Lets Get Started",
             nextIcon: true,
             onPress: () {
-              if (isSelected == 1) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Login(
-                            role: 'Customer',
-                          )),
-                );
-              } else if (isSelected == 2) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Login(
-                            role: 'Banquet',
-                          )),
-                );
-              }
+              addDummyData();
+
+              // if (isSelected == 1) {
+              //   Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => Login(
+              //               role: 'Customer',
+              //             )),
+              //   );
+              // } else if (isSelected == 2) {
+              //   Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => Login(
+              //               role: 'Banquet',
+              //             )),
+              //   );
+              // }
             },
             color: isSelected == 0
                 ? AppColors.black.withOpacity(0.5)

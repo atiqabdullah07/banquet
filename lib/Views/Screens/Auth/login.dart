@@ -1,7 +1,7 @@
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
 import 'package:banquet/Views/Screens/Auth/signup.dart';
-import 'package:banquet/Views/Screens/Customer/customer_dashboard.dart';
+
 import 'package:banquet/Views/Screens/home.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
 import 'package:flutter/material.dart';
