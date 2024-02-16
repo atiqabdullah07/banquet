@@ -8,7 +8,7 @@ import 'package:banquet/App%20Constants/helper_functions.dart';
 import 'package:banquet/Models/customer_model.dart' as model;
 import 'package:banquet/Views/Screens/Auth/login.dart';
 
-import 'package:banquet/Views/Screens/home.dart';
+import 'package:banquet/Views/Screens/Customer/customer_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -36,7 +36,7 @@ class AuthController extends GetxController {
       );
     } else {
       Get.offAll(
-        () => const Home(),
+        () => const CustomerHome(),
       );
     }
   }
@@ -117,7 +117,7 @@ class AuthController extends GetxController {
 
         if (user != null) {
           EasyLoading.dismiss();
-          Get.to(const Home());
+          Get.to(const CustomerHome());
         }
       } else {
         EasyLoading.dismiss();

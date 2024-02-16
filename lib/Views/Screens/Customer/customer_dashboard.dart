@@ -13,7 +13,6 @@ class CustomerDashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: AppColors.backgroundColor,
         body: SingleChildScrollView(
           child: Column(
             children: [

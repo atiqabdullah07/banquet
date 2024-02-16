@@ -4,8 +4,6 @@ import 'package:get/get.dart';
 class ControllerBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put(AuthController());
-    // Get.put(CommentsController());
-    // Get.put(ProfileController());
+    // Get.put(AuthController());
   }
 }

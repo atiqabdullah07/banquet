@@ -3,14 +3,14 @@ import 'package:banquet/Views/Screens/Customer/customer_dashboard.dart';
 import 'package:banquet/Views/Screens/Customer/My%20Profile/my_profile.dart';
 import 'package:flutter/material.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class CustomerHome extends StatefulWidget {
+  const CustomerHome({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<CustomerHome> createState() => _CustomerHomeState();
 }
 
-class _HomeState extends State<Home> {
+class _CustomerHomeState extends State<CustomerHome> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
@@ -18,7 +18,7 @@ class _HomeState extends State<Home> {
     const Center(
       child: Text('Chats'),
     ),
-    MyProfile(),
+    const MyProfile(),
   ];
 
   @override
