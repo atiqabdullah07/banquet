@@ -1,5 +1,6 @@
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
+import 'package:banquet/Views/Screens/Banquet/Banquet%20Profile/banquet_profile.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
 
 import 'package:flutter/material.dart';
@@ -13,61 +14,68 @@ class BanquetDashboard extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.backgroundColor,
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child: CircleAvatar(
-                      radius: 40.r,
-                      backgroundColor: AppColors.black.withOpacity(0.5),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const BanquetProfile()));
+                      },
                       child: CircleAvatar(
-                        radius: 38.r,
+                        radius: 40.r,
                         backgroundColor: AppColors.black.withOpacity(0.5),
-                        backgroundImage: const NetworkImage(
-                            "https://abouteball.com/wp-content/uploads/2015/03/photodune-4276142-smiling-portraits-m1.jpg"),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10.w,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Hello!",
-                        style: TextStyle(
-                          color: AppColors.black.withOpacity(0.5),
-                          fontSize: 20,
+                        child: CircleAvatar(
+                          radius: 38.r,
+                          backgroundColor: AppColors.black.withOpacity(0.5),
+                          backgroundImage: const NetworkImage(
+                              "https://abouteball.com/wp-content/uploads/2015/03/photodune-4276142-smiling-portraits-m1.jpg"),
                         ),
                       ),
-                      const Text(
-                        "Marquee ",
-                        style: TextStyle(
-                            color: AppColors.black,
+                    ),
+                    SizedBox(
+                      width: 10.w,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Hello!",
+                          style: TextStyle(
+                            color: AppColors.black.withOpacity(0.5),
                             fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              height(20),
-              titleText(title: 'My Bookings'),
-              height(10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: List.generate(2, (index) {
-                  return bookingCard();
-                }),
-              ),
-            ],
+                          ),
+                        ),
+                        const Text(
+                          "Marquee ",
+                          style: TextStyle(
+                              color: AppColors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+                height(20),
+                titleText(title: 'My Bookings'),
+                height(10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: List.generate(2, (index) {
+                    return bookingCard();
+                  }),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -79,13 +87,13 @@ Widget bookingCard() {
   return Padding(
     padding: const EdgeInsets.only(bottom: 20),
     child: Container(
-      height: 150.h,
+      height: 170.h,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
           softShadow(),
         ],
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
       ),
       child: Padding(
         padding: const EdgeInsets.all(15),
@@ -104,26 +112,28 @@ Widget bookingCard() {
             ),
             Divider(
               color: AppColors.black.withOpacity(0.1),
+              height: 10.h,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Expanded(
+                Expanded(
                   child: Text(
                     'Evening',
                     style: TextStyle(
                         color: AppColors.primaryColor,
-                        fontWeight: FontWeight.bold),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14.r),
                   ),
                 ),
                 SizedBox(
                   width: 5.w,
                 ),
-                const Align(
+                Align(
                   alignment: Alignment.centerRight,
                   child: Text(
                     '26 Jan 2024',
-                    style: TextStyle(fontSize: 14),
+                    style: TextStyle(fontSize: 14.r),
                   ),
                 ),
               ],
@@ -141,14 +151,16 @@ Row bookingsCardCell({required String title, required String value}) {
     children: [
       Text(
         title,
-        style: const TextStyle(
-            color: AppColors.black, fontSize: 16, fontWeight: FontWeight.w600),
+        style: TextStyle(
+            color: AppColors.black,
+            fontSize: 16.r,
+            fontWeight: FontWeight.w600),
       ),
       Text(
         value,
-        style: const TextStyle(
+        style: TextStyle(
           color: AppColors.black,
-          fontSize: 16,
+          fontSize: 16.r,
         ),
       ),
     ],
