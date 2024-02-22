@@ -28,6 +28,7 @@ class Conversations extends StatelessWidget {
                 child: Row(
                   children: [
                     const CircleAvatar(
+                      backgroundColor: AppColors.secondaryColor,
                       radius: 30,
                       child: Icon(
                         Icons.person,

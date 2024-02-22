@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 
 class MessageBubble extends StatelessWidget {
   final String text;
+  final bool isSenderMe;
 
-  const MessageBubble({super.key, required this.text});
+  const MessageBubble(
+      {super.key, required this.text, required this.isSenderMe});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,9 @@ class MessageBubble extends StatelessWidget {
       height: bubbleHeight,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: AppColors.secondaryColor,
+        color: isSenderMe == true
+            ? AppColors.secondaryColor
+            : AppColors.black.withOpacity(0.1),
       ),
       child: Center(
         child: Text(text),

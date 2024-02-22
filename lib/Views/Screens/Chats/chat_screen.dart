@@ -6,7 +6,14 @@ class ChatsScreen extends StatelessWidget {
   ChatsScreen({super.key});
   final TextEditingController messageController = TextEditingController();
   var messages = [
-    Messages(message: 'Ok then i wanna book for one day', isSenderMe: false),
+    Messages(
+        message:
+            'Ok then i wanna book for one day. Ok then i wanna book for one dayOk then i wanna book for one dayOk then i wanna book for one dayOk then i wanna book for one dayOk then i wanna book for one dayOk then i wanna book for one day',
+        isSenderMe: true),
+    Messages(
+        message:
+            'Ok then i wanna book for one day. Ok then i wanna book for one dayOk then i wanna book for one dayOk then i wanna book for one dayOk then i wanna book for one dayOk then i wanna book for one dayOk then i wanna book for one day',
+        isSenderMe: false),
     Messages(message: 'Yes it is', isSenderMe: true),
     Messages(message: 'Is it availaible on Monday', isSenderMe: false),
     Messages(message: 'Yes please', isSenderMe: true),
@@ -36,8 +43,9 @@ class ChatsScreen extends StatelessWidget {
           Flexible(
             child: TextField(
               controller: messageController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
                 hintText: 'Send a message',
               ),
             ),
@@ -78,7 +86,9 @@ class ChatsScreen extends StatelessWidget {
                             ? Alignment.centerLeft
                             : Alignment.centerRight,
                         child: MessageBubble(
-                            text: messages[index].message.toString()),
+                          text: messages[index].message.toString(),
+                          isSenderMe: messages[index].isSenderMe,
+                        ),
                       ),
                     );
                   },
