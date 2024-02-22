@@ -1,6 +1,8 @@
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/Views/Screens/Banquet/Banquet%20Dashboard/banquet_dashboard.dart';
-import 'package:banquet/Views/Screens/Customer/My%20Profile/my_profile.dart';
+import 'package:banquet/Views/Screens/Banquet/Setup%20Profile/setup_profile01.dart';
+import 'package:banquet/Views/Screens/Chats/conversations.dart';
+
 import 'package:flutter/material.dart';
 
 class BanquetHome extends StatefulWidget {
@@ -15,10 +17,8 @@ class _HomeState extends State<BanquetHome> {
 
   final List<Widget> _pages = [
     const BanquetDashboard(),
-    const Center(
-      child: Text('Chats'),
-    ),
-    const MyProfile(),
+    const Conversations(),
+    const SetupProfile01(),
   ];
 
   @override

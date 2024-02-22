@@ -2,10 +2,13 @@ import 'dart:io';
 
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/Controller%20Binding/controller_binding.dart';
+import 'package:banquet/Views/Screens/Banquet/Banquet%20Dashboard/banquet_dashboard.dart';
 import 'package:banquet/Views/Screens/Banquet/Booking%20Request/booking_requests.dart';
 
 import 'package:banquet/Views/Screens/Banquet/Setup%20Profile/setup_profile01.dart';
 import 'package:banquet/Views/Screens/Banquet/banquet_home.dart';
+import 'package:banquet/Views/Screens/Chats/chats_widgets.dart';
+import 'package:banquet/Views/Screens/Customer/customer_home.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 
@@ -43,6 +46,6 @@ void main() async {
             debugShowCheckedModeBanner: false,
             builder: EasyLoading.init(),
             title: 'Banquet',
-            home: const BookingRequests());
+            home: const BanquetHome());
       }));
 }

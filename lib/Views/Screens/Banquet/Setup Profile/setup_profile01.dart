@@ -44,7 +44,7 @@ class _SetupProfile01State extends State<SetupProfile01> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SetupProfile01'),
+        title: const Text('Setup Banquet Profile'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -72,7 +72,7 @@ class _SetupProfile01State extends State<SetupProfile01> {
                                 radius: 48.r,
                                 backgroundColor: Colors.white,
                                 backgroundImage: const NetworkImage(
-                                    "https://abouteball.com/wp-content/uploads/2015/03/photodune-4276142-smiling-portraits-m1.jpg"),
+                                    "https://images-platform.99static.com/8o4gbZyhGRrmCBJKnX4GlKZ-9EA=/265x41:1552x1328/500x500/top/smart/99designs-contests-attachments/91/91413/attachment_91413639"),
                               ),
                       ),
                     ),
