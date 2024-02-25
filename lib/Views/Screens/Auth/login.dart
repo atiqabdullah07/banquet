@@ -46,7 +46,7 @@ class Login extends StatelessWidget {
                     title: 'Login',
                     onPress: () {
                       authController.loginUser(
-                          emailController.text, passwordController.text);
+                          emailController.text, passwordController.text, role);
                     },
                   ),
                   height(150)

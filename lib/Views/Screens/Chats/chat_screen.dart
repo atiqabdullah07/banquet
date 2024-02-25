@@ -2,18 +2,11 @@ import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/Views/Screens/Chats/chats_widgets.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class ChatsScreen extends StatelessWidget {
   ChatsScreen({super.key});
   final TextEditingController messageController = TextEditingController();
   var messages = [
-    Messages(
-        message:
-            'Ok then i wanna book for one day. Ok then i wanna book for one dayOk then i wanna book for one dayOk then i wanna book for one dayOk then i wanna book for one dayOk then i wanna book for one dayOk then i wanna book for one day',
-        isSenderMe: true),
-    Messages(
-        message:
-            'Ok then i wanna book for one day. Ok then i wanna book for one dayOk then i wanna book for one dayOk then i wanna book for one dayOk then i wanna book for one dayOk then i wanna book for one dayOk then i wanna book for one day',
-        isSenderMe: false),
     Messages(message: 'Yes it is', isSenderMe: true),
     Messages(message: 'Is it availaible on Monday', isSenderMe: false),
     Messages(message: 'Yes please', isSenderMe: true),

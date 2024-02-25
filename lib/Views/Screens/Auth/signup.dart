@@ -58,6 +58,7 @@ class SignUp extends StatelessWidget {
                         nameController.text,
                         emailController.text,
                         passwordController.text,
+                        role: role,
                       );
                     }),
                 height(150)

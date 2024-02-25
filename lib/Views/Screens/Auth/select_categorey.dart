@@ -77,7 +77,7 @@ class _CategoreyPageState extends State<CategoreyPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => Login(
-                            role: 'Customer',
+                            role: 'customer',
                           )),
                 );
               } else if (isSelected == 2) {
@@ -85,7 +85,7 @@ class _CategoreyPageState extends State<CategoreyPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => Login(
-                            role: 'Banquet',
+                            role: 'banquet',
                           )),
                 );
               }
