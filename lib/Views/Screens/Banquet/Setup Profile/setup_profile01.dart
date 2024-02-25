@@ -3,9 +3,12 @@ import 'dart:io';
 
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
+import 'package:banquet/Controllers/banquet_controller.dart';
+import 'package:banquet/Models/banquet_model.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SetupProfile01 extends StatefulWidget {
@@ -17,6 +20,13 @@ class SetupProfile01 extends StatefulWidget {
 
 class _SetupProfile01State extends State<SetupProfile01> {
   final TextEditingController _parkingController = TextEditingController();
+  final TextEditingController _guestsController = TextEditingController();
+  final TextEditingController _bookingPriceController = TextEditingController();
+  final TextEditingController _facilitiesController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
+
+  final BanquetController banquetController = Get.put(BanquetController());
   final _formKey = GlobalKey<FormState>();
   File? pickedImage;
   String selectedValue = 'Marquee/Banquet';
@@ -126,6 +136,7 @@ class _SetupProfile01State extends State<SetupProfile01> {
                     Padding(
                       padding: EdgeInsets.only(top: 10.h, bottom: 20.h),
                       child: TextFormField(
+                        controller: _guestsController,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           hintText: 'Enter Guests Capacity',
@@ -150,6 +161,7 @@ class _SetupProfile01State extends State<SetupProfile01> {
                     Padding(
                       padding: EdgeInsets.only(top: 10.h, bottom: 20.h),
                       child: TextFormField(
+                        controller: _bookingPriceController,
                         decoration: InputDecoration(
                           hintText: 'Enter Booking Price in PKR',
                           hintStyle: TextStyle(
@@ -173,6 +185,7 @@ class _SetupProfile01State extends State<SetupProfile01> {
                     Padding(
                       padding: EdgeInsets.only(top: 10.h, bottom: 20.h),
                       child: TextFormField(
+                        controller: _facilitiesController,
                         decoration: InputDecoration(
                           hintText: 'Enter Facilities',
                           hintStyle: TextStyle(
@@ -197,6 +210,7 @@ class _SetupProfile01State extends State<SetupProfile01> {
                     Padding(
                       padding: EdgeInsets.only(top: 10.h, bottom: 20.h),
                       child: TextFormField(
+                        controller: _descriptionController,
                         maxLines: 3,
                         decoration: InputDecoration(
                           hintText: 'Enter Description of your Banquet',
@@ -221,6 +235,7 @@ class _SetupProfile01State extends State<SetupProfile01> {
                     Padding(
                       padding: EdgeInsets.only(top: 10.h, bottom: 20.h),
                       child: TextFormField(
+                        controller: _locationController,
                         decoration: InputDecoration(
                           hintText: 'Enter Banquet Location',
                           hintStyle: TextStyle(
@@ -242,7 +257,16 @@ class _SetupProfile01State extends State<SetupProfile01> {
                         title: 'Continue',
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
-                            print('Submited');
+                            banquetController
+                                .updateBanquetInfoForCurrentUser(Banquet(
+                              venueType: selectedValue.toString(),
+                              parkingCapacity: _parkingController.text,
+                              guestsCapacity: _guestsController.text,
+                              bookingPrice: _bookingPriceController.text,
+                              facilities: _facilitiesController.text,
+                              description: _descriptionController.text,
+                              location: _locationController.text,
+                            ));
                           }
                         },
                       ),
