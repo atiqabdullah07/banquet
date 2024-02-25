@@ -17,14 +17,16 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  Platform.isIOS
-      ? await Firebase.initializeApp()
-      : await Firebase.initializeApp(
-          options: const FirebaseOptions(
-              apiKey: "AIzaSyBrH2YhNvBoMG8afZMovxU1FIJmzvLrO10",
-              appId: "1:310762733462:android:d48a51a8385d51f62327b7",
-              messagingSenderId: "310762733462",
-              projectId: "banquet-75822"));
+  // Platform.isIOS
+  //     ? await Firebase.initializeApp()
+  //     :
+
+  await Firebase.initializeApp(
+      options: const FirebaseOptions(
+          apiKey: "AIzaSyBrH2YhNvBoMG8afZMovxU1FIJmzvLrO10",
+          appId: "1:310762733462:android:d48a51a8385d51f62327b7",
+          messagingSenderId: "310762733462",
+          projectId: "banquet-75822"));
 
   // Ensure screen size and initialize ScreenUtil
   await ScreenUtil.ensureScreenSize();
