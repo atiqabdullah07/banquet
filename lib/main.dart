@@ -30,7 +30,8 @@ void main() async {
 
   // Ensure screen size and initialize ScreenUtil
   await ScreenUtil.ensureScreenSize();
-  runApp(ScreenUtilInit(
+  runApp(
+    ScreenUtilInit(
       designSize: const Size(393, 852),
       builder: (context, child) {
         return GetMaterialApp(
@@ -45,5 +46,7 @@ void main() async {
             builder: EasyLoading.init(),
             title: 'Banquet',
             home: const CategoreyPage());
-      }));
+      },
+    ),
+  );
 }

@@ -1,13 +1,29 @@
 import 'package:banquet/App%20Constants/constants.dart';
+import 'package:banquet/Controllers/banquet_controller.dart';
+import 'package:banquet/Models/banquet_model.dart';
 import 'package:banquet/Views/Screens/Customer/Events/events.dart';
 
 import 'package:banquet/Views/Screens/Customer/Hall%20Details/hall_details.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
-class CustomerDashboard extends StatelessWidget {
-  const CustomerDashboard({super.key});
+class CustomerDashboard extends StatefulWidget {
+  CustomerDashboard({super.key});
+
+  @override
+  State<CustomerDashboard> createState() => _CustomerDashboardState();
+}
+
+class _CustomerDashboardState extends State<CustomerDashboard> {
+  final BanquetController banquetController = Get.put(BanquetController());
+
+  @override
+  void initState() {
+    super.initState();
+    banquetController.fetchBanquets();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -191,20 +207,33 @@ class CustomerDashboard extends StatelessWidget {
               SizedBox(
                 height: 5.h,
               ),
-              SizedBox(
-                height: 1.sh / 2,
-                child: ListView.builder(
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    return hallCards(onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HallDetails()));
-                    });
-                  },
+
+              // Column(
+              //   children: List.generate(
+              //       3,
+              //       (index) => hallCards(onTap: () {
+              //             Navigator.push(
+              //                 context,
+              //                 MaterialPageRoute(
+              //                     builder: (context) => const HallDetails()));
+              //           })),
+              // )
+              Obx(
+                () => SizedBox(
+                  height: 1.sh / 2,
+                  child: ListView.builder(
+                    itemCount: banquetController.banquets.length,
+                    itemBuilder: (context, index) {
+                      return hallCards(onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HallDetails()));
+                      });
+                    },
+                  ),
                 ),
-              )
+              ),
             ],
           ),
         ),

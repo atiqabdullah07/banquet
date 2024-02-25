@@ -113,6 +113,7 @@ class AuthController extends GetxController {
 
   Future<void> loginUser(String email, String password, String role) async {
     try {
+      print(role);
       easyLoading();
       if (email.isNotEmpty && password.isNotEmpty) {
         UserCredential cred = await firebaseAuth.signInWithEmailAndPassword(
@@ -127,7 +128,7 @@ class AuthController extends GetxController {
         if (userDoc.exists) {
           // User does not exist in the 'customers' collection
           EasyLoading.dismiss();
-          if (role == 'cusomer') {
+          if (role == 'customer') {
             Get.to(const CustomerHome());
           } else if (role == 'banquet') {
             Get.to(const BanquetHome());

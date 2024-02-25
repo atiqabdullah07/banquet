@@ -14,7 +14,7 @@ class _CustomerHomeState extends State<CustomerHome> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    const CustomerDashboard(),
+    CustomerDashboard(),
     const Center(
       child: Text('Chats'),
     ),

@@ -1,10 +1,12 @@
 import 'package:banquet/App%20Constants/constants.dart';
+import 'package:banquet/Controllers/banquet_controller.dart';
 import 'package:banquet/Views/Screens/Auth/auth_widgets.dart';
 import 'package:banquet/Views/Screens/Auth/login.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class CategoreyPage extends StatefulWidget {
   const CategoreyPage({super.key});
@@ -14,6 +16,7 @@ class CategoreyPage extends StatefulWidget {
 }
 
 class _CategoreyPageState extends State<CategoreyPage> {
+  final BanquetController banquetController = Get.put(BanquetController());
   var isSelected = 0;
   @override
   Widget build(BuildContext context) {
