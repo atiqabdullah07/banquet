@@ -4,6 +4,7 @@ import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/Controller%20Binding/controller_binding.dart';
 import 'package:banquet/Views/Screens/Auth/select_categorey.dart';
 import 'package:banquet/Views/Screens/Banquet/Banquet%20Dashboard/banquet_dashboard.dart';
+import 'package:banquet/Views/Screens/Banquet/Banquet%20Menus/banquet_menus.dart';
 
 import 'package:banquet/Views/Screens/Banquet/banquet_home.dart';
 import 'package:banquet/Views/Screens/Customer/customer_home.dart';
@@ -46,7 +47,7 @@ void main() async {
             debugShowCheckedModeBanner: false,
             builder: EasyLoading.init(),
             title: 'Banquet',
-            home: BanquetDashboard());
+            home: CategoreyPage());
       },
     ),
   );

@@ -89,6 +89,8 @@ class Menu extends StatelessWidget {
               ))
         ]);
   }
+
+  static fromJson(Map<String, dynamic> bookingJson) {}
 }
 
 Widget menuSection(

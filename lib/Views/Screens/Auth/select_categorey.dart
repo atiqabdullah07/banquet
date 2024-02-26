@@ -70,7 +70,6 @@ class _CategoreyPageState extends State<CategoreyPage> {
           SizedBox(
             height: 100.h,
           ),
-          CustomButton(title: 'test', onPress: () {}),
           CustomButton(
             title: "Lets Get Started",
             nextIcon: true,

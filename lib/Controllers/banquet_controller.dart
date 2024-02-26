@@ -1,6 +1,8 @@
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
 import 'package:banquet/Models/banquet_model.dart';
+import 'package:banquet/Models/menu_model.dart';
+import 'package:banquet/Views/Screens/Customer/Hall%20Details/hall_details_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -29,6 +31,28 @@ class BanquetController extends GetxController {
       print(banquets);
     } catch (e) {
       print("Error fetching and appending banquets: $e");
+    }
+  }
+
+  Future<void> addMenu(PackageMenu menu) async {
+    try {
+      easyLoading();
+
+      String currentUserId = firebaseAuth.currentUser!.uid;
+
+      // Update the 'menu' field in the banquet document with the new menu
+      await firestore.collection('banquet').doc(currentUserId).update({
+        'menu': FieldValue.arrayUnion([menu.toJson()]),
+      });
+
+      EasyLoading.dismiss();
+      Get.snackbar('Success', 'Menu Added Successfully');
+
+      print('Menu added successfully');
+    } catch (e) {
+      EasyLoading.dismiss();
+      print('Error adding menu: $e');
+      throw e;
     }
   }
 

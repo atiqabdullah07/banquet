@@ -2,6 +2,7 @@ import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
 import 'package:banquet/Controllers/banquet_controller.dart';
 import 'package:banquet/Models/banquet_model.dart';
+import 'package:banquet/Views/Screens/Banquet/Banquet%20Menus/banquet_menus.dart';
 import 'package:banquet/Views/Screens/Banquet/Banquet%20Profile/banquet_profile.dart';
 import 'package:banquet/Views/Screens/Banquet/Booking%20Request/booking_requests.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
@@ -35,11 +36,11 @@ class _BanquetDashboardState extends State<BanquetDashboard> {
         backgroundColor: AppColors.backgroundColor,
         appBar: AppBar(
           title: ElevatedButton(
-            child: Text('Test'),
-            onPressed: () {
-              _banquetProfileController.getAuthenticatedUserBanquetInfo();
-            },
-          ),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AddMenu()));
+              },
+              child: Text('Test')),
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -121,12 +122,21 @@ class _BanquetDashboardState extends State<BanquetDashboard> {
                 height(20),
                 titleText(title: 'My Bookings'),
                 height(10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: List.generate(2, (index) {
-                    return bookingCard();
-                  }),
-                ),
+                Obx(
+                  () =>
+                      _banquetProfileController.myBanquet.value.bookings == null
+                          ? Center(
+                              child: Text('No Bookings'),
+                            )
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: List.generate(
+                                  _banquetProfileController.myBanquet.value
+                                      .bookings!.length, (index) {
+                                return bookingCard();
+                              }),
+                            ),
+                )
               ],
             ),
           ),

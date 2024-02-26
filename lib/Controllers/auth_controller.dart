@@ -5,7 +5,8 @@ import 'dart:io';
 
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
-import 'package:banquet/Models/customer_model.dart' as model;
+import 'package:banquet/Models/banquet_model.dart';
+import 'package:banquet/Models/customer_model.dart';
 import 'package:banquet/Views/Screens/Auth/login.dart';
 import 'package:banquet/Views/Screens/Banquet/banquet_home.dart';
 
@@ -82,24 +83,40 @@ class AuthController extends GetxController {
           password: password,
         );
 
-        // Create a new customer document in the 'customers' collection
-        model.Customer customer = model.Customer(
-          email: email,
-          name: username,
-          profilePhoto: '',
-          uid: cred.user!.uid,
-        );
+        if (role == 'customer') {
+          // Create a new customer document in the 'customers' collection
+          Customer customer = Customer(
+            email: email,
+            name: username,
+            profilePhoto: '',
+            uid: cred.user!.uid,
+          );
 
-        await firestore
-            .collection(role)
-            .doc(cred.user!.uid)
-            .set(customer.toJson());
+          await firestore
+              .collection(role)
+              .doc(cred.user!.uid)
+              .set(customer.toJson());
 
-        EasyLoading.dismiss();
-        Get.to(
-            Login(role: 'customer')); // navigate to login screen for customer
-        Get.snackbar('User', 'Customer Added Successfully');
-        log('Customer Added Successfully');
+          EasyLoading.dismiss();
+          Get.to(
+              Login(role: 'customer')); // navigate to login screen for customer
+          Get.snackbar('User', 'Customer Added Successfully');
+          log('Customer Added Successfully');
+        } else if (role == 'banquet') {
+          Banquet banquet = Banquet(
+            email: email,
+            name: username,
+            uid: cred.user!.uid,
+          );
+          await firestore
+              .collection(role)
+              .doc(cred.user!.uid)
+              .set(banquet.toJson());
+          EasyLoading.dismiss();
+          Get.to(
+              Login(role: 'banquet')); // navigate to login screen for customer
+          Get.snackbar('Banquet', 'Banquet Added Successfully');
+        }
       } else {
         EasyLoading.dismiss();
         Get.snackbar('Error', 'Please Enter all the Information');
