@@ -16,7 +16,7 @@ class _HomeState extends State<BanquetHome> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    const BanquetDashboard(),
+    BanquetDashboard(),
     const Conversations(),
     const SetupProfile01(),
   ];

@@ -1,14 +1,22 @@
 import 'package:another_carousel_pro/another_carousel_pro.dart';
 import 'package:banquet/App%20Constants/constants.dart';
+import 'package:banquet/Models/banquet_model.dart';
 import 'package:banquet/Views/Screens/Customer/Confirm%20Booking/confirm_booking.dart';
 import 'package:banquet/Views/Screens/Customer/Hall%20Details/hall_details_widgets.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class HallDetails extends StatelessWidget {
-  const HallDetails({super.key});
+class HallDetails extends StatefulWidget {
+  const HallDetails({super.key, required this.banquet});
 
+  final Banquet banquet;
+
+  @override
+  State<HallDetails> createState() => _HallDetailsState();
+}
+
+class _HallDetailsState extends State<HallDetails> {
   @override
   Widget build(BuildContext context) {
     var images = const [
@@ -45,10 +53,10 @@ class HallDetails extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  titleText(title: 'Mehria Marquee'),
+                  titleText(title: widget.banquet.name.toString()),
                   subTitleText(title: 'Description'),
                   Text(
-                    'Come to Mehria Marquee & Events for all your special occasions, For us no event is big or small, Our aim is to make sure its memorable.',
+                    widget.banquet.description.toString(),
                     style: TextStyle(color: AppColors.black.withOpacity(0.7)),
                   ),
                   SizedBox(
@@ -60,21 +68,21 @@ class HallDetails extends StatelessWidget {
                       hallDetailsCard(
                           icon: 'assets/icons/type.png',
                           title: 'Type',
-                          value: 'Marquee'),
+                          value: widget.banquet.venueType.toString()),
                       SizedBox(
                         width: 10.w,
                       ),
                       hallDetailsCard(
                           icon: 'assets/icons/parking.png',
                           title: 'Parking',
-                          value: '100 Cars'),
+                          value: widget.banquet.parkingCapacity.toString()),
                       SizedBox(
                         width: 10.w,
                       ),
                       hallDetailsCard(
                           icon: 'assets/icons/capacity.png',
                           title: 'Capacity',
-                          value: '1500'),
+                          value: widget.banquet.guestsCapacity.toString()),
                     ],
                   ),
                   SizedBox(
@@ -83,12 +91,14 @@ class HallDetails extends StatelessWidget {
                   Row(
                     children: [
                       hallDetailsCard(
-                          title: 'Booking Price', value: 'Pkr 20000 - 30000'),
+                          title: 'Booking Price',
+                          value: widget.banquet.bookingPrice.toString()),
                       SizedBox(
                         width: 10.w,
                       ),
                       hallDetailsCard(
-                          title: 'Facilties', value: 'Decoration, Studio'),
+                          title: 'Facilties',
+                          value: widget.banquet.facilities.toString()),
                       SizedBox(
                         width: 10.w,
                       ),

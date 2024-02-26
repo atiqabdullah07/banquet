@@ -1,20 +1,46 @@
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
+import 'package:banquet/Controllers/banquet_controller.dart';
+import 'package:banquet/Models/banquet_model.dart';
 import 'package:banquet/Views/Screens/Banquet/Banquet%20Profile/banquet_profile.dart';
 import 'package:banquet/Views/Screens/Banquet/Booking%20Request/booking_requests.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
-class BanquetDashboard extends StatelessWidget {
-  const BanquetDashboard({super.key});
+class BanquetDashboard extends StatefulWidget {
+  BanquetDashboard({super.key});
+
+  @override
+  State<BanquetDashboard> createState() => _BanquetDashboardState();
+}
+
+class _BanquetDashboardState extends State<BanquetDashboard> {
+  final BanquetController _banquetController = Get.put(BanquetController());
+  final BanquetProfileController _banquetProfileController =
+      Get.put(BanquetProfileController());
+  Banquet? banquet;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.backgroundColor,
+        appBar: AppBar(
+          title: ElevatedButton(
+            child: Text('Test'),
+            onPressed: () {
+              _banquetProfileController.getAuthenticatedUserBanquetInfo();
+            },
+          ),
+        ),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -48,25 +74,33 @@ class BanquetDashboard extends StatelessWidget {
                         SizedBox(
                           width: 10.w,
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Hello!",
-                              style: TextStyle(
-                                color: AppColors.black.withOpacity(0.5),
-                                fontSize: 20,
-                              ),
-                            ),
-                            const Text(
-                              "Marquee ",
-                              style: TextStyle(
-                                  color: AppColors.black,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
+                        Obx(
+                          () => _banquetProfileController.banquetname == ''
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Hello!",
+                                      style: TextStyle(
+                                        color: AppColors.black.withOpacity(0.5),
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    Text(
+                                      _banquetProfileController
+                                          .myBanquet.value.name
+                                          .toString(),
+                                      style: TextStyle(
+                                          color: AppColors.black,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
                         )
                       ],
                     ),

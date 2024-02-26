@@ -2,6 +2,7 @@ import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
 import 'package:banquet/Models/banquet_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:get/get.dart';
@@ -61,6 +62,53 @@ class BanquetController extends GetxController {
       EasyLoading.dismiss();
       print('Error updating banquet information: $e');
       throw e;
+    }
+  }
+}
+
+class BanquetProfileController extends GetxController {
+  RxString banquetname = ''.obs;
+  Rx<Banquet> myBanquet = Banquet().obs;
+
+  @override
+  void onInit() async {
+    super.onInit();
+    await getAuthenticatedUserBanquetInfo();
+  }
+
+  Future<void> getAuthenticatedUserBanquetInfo() async {
+    try {
+      final FirebaseAuth _auth = FirebaseAuth.instance;
+      final CollectionReference _banquetCollection =
+          FirebaseFirestore.instance.collection('banquet');
+
+      // Check if a user is authenticated
+      User? user = _auth.currentUser;
+      if (user == null) {
+        return null; // User not authenticated
+      }
+
+      // Get the document snapshot from the 'banquet' collection using the user's UID
+      DocumentSnapshot userDoc = await _banquetCollection.doc(user.uid).get();
+
+      //print(userDoc);
+
+      // Check if the document exists
+      if (userDoc.exists) {
+        // Map the data from the document snapshot to your Banquet model
+        // banquet = Banquet.fromJson(userDoc.data() as Map<String, dynamic>)
+        //     as Rx<Banquet>;
+        var banquet = Banquet.fromJson(userDoc.data() as Map<String, dynamic>);
+        print(banquet.name);
+        banquetname.value = banquet.name!;
+
+        myBanquet.value = banquet;
+      } else {
+        return null; // Document not found
+      }
+    } catch (e) {
+      print("Error fetching user data: $e");
+      return null;
     }
   }
 }

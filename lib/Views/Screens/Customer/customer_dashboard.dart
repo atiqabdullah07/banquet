@@ -228,7 +228,10 @@ class _CustomerDashboardState extends State<CustomerDashboard> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const HallDetails()));
+                                builder: (context) => HallDetails(
+                                      banquet:
+                                          banquetController.banquets[index],
+                                    )));
                       });
                     },
                   ),

@@ -1,5 +1,6 @@
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/Controllers/banquet_controller.dart';
+import 'package:banquet/Models/banquet_model.dart';
 import 'package:banquet/Views/Screens/Auth/auth_widgets.dart';
 import 'package:banquet/Views/Screens/Auth/login.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
@@ -69,6 +70,7 @@ class _CategoreyPageState extends State<CategoreyPage> {
           SizedBox(
             height: 100.h,
           ),
+          CustomButton(title: 'test', onPress: () {}),
           CustomButton(
             title: "Lets Get Started",
             nextIcon: true,
