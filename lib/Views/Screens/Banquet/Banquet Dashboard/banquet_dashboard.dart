@@ -2,7 +2,7 @@ import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
 import 'package:banquet/Controllers/banquet_controller.dart';
 import 'package:banquet/Models/banquet_model.dart';
-import 'package:banquet/Views/Screens/Banquet/Banquet%20Menus/banquet_menus.dart';
+
 import 'package:banquet/Views/Screens/Banquet/Banquet%20Profile/banquet_profile.dart';
 import 'package:banquet/Views/Screens/Banquet/Booking%20Request/booking_requests.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
@@ -37,8 +37,9 @@ class _BanquetDashboardState extends State<BanquetDashboard> {
         appBar: AppBar(
           title: ElevatedButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AddMenu()));
+                _banquetController.fetchBookingRequests();
+                // Navigator.push(context,
+                //     MaterialPageRoute(builder: (context) => AddMenu()));
               },
               child: Text('Test')),
         ),
@@ -76,7 +77,9 @@ class _BanquetDashboardState extends State<BanquetDashboard> {
                           width: 10.w,
                         ),
                         Obx(
-                          () => _banquetProfileController.banquetname == ''
+                          () => _banquetProfileController
+                                      .myBanquet.value.name ==
+                                  ''
                               ? const Center(
                                   child: CircularProgressIndicator(),
                                 )
@@ -95,7 +98,7 @@ class _BanquetDashboardState extends State<BanquetDashboard> {
                                       _banquetProfileController
                                           .myBanquet.value.name
                                           .toString(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: AppColors.black,
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold),
@@ -110,8 +113,7 @@ class _BanquetDashboardState extends State<BanquetDashboard> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      const BookingRequests()));
+                                  builder: (context) => BookingRequests()));
                         },
                         icon: const Icon(
                           Icons.notifications_outlined,
@@ -123,19 +125,23 @@ class _BanquetDashboardState extends State<BanquetDashboard> {
                 titleText(title: 'My Bookings'),
                 height(10),
                 Obx(
-                  () =>
-                      _banquetProfileController.myBanquet.value.bookings == null
-                          ? Center(
-                              child: Text('No Bookings'),
-                            )
-                          : Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: List.generate(
-                                  _banquetProfileController.myBanquet.value
-                                      .bookings!.length, (index) {
-                                return bookingCard();
-                              }),
-                            ),
+                  () => _banquetController.bookings.isEmpty
+                      ? Center(
+                          child: Text('No Bookings'),
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: List.generate(
+                              _banquetController.bookings.length, (index) {
+                            var booking = _banquetController.bookings[index];
+                            return bookingCard(
+                                bookingPrice: booking.bookingPrice,
+                                menu: booking.menu,
+                                guests: booking.guests,
+                                timeSlot: booking.timeSlot,
+                                date: booking.date);
+                          }),
+                        ),
                 )
               ],
             ),
@@ -146,7 +152,12 @@ class _BanquetDashboardState extends State<BanquetDashboard> {
   }
 }
 
-Widget bookingCard() {
+Widget bookingCard(
+    {required String bookingPrice,
+    required String menu,
+    required String guests,
+    required String timeSlot,
+    required String date}) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 20),
     child: Container(
@@ -167,9 +178,10 @@ Widget bookingCard() {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  bookingsCardCell(title: 'Booking Price', value: 'Rs. 20000'),
-                  bookingsCardCell(title: 'Menu', value: 'Menu 01'),
-                  bookingsCardCell(title: 'Guests', value: '200'),
+                  bookingsCardCell(
+                      title: 'Booking Price', value: 'Rs. $bookingPrice'),
+                  bookingsCardCell(title: 'Menu', value: menu),
+                  bookingsCardCell(title: 'Guests', value: guests),
                 ],
               ),
             ),
@@ -182,7 +194,7 @@ Widget bookingCard() {
               children: [
                 Expanded(
                   child: Text(
-                    'Evening',
+                    timeSlot,
                     style: TextStyle(
                         color: AppColors.primaryColor,
                         fontWeight: FontWeight.bold,
@@ -195,7 +207,7 @@ Widget bookingCard() {
                 Align(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    '26 Jan 2024',
+                    date,
                     style: TextStyle(fontSize: 14.r),
                   ),
                 ),

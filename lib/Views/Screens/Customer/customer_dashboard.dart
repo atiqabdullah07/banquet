@@ -1,6 +1,7 @@
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/Controllers/banquet_controller.dart';
-import 'package:banquet/Models/banquet_model.dart';
+import 'package:banquet/Controllers/customer_controller.dart';
+
 import 'package:banquet/Views/Screens/Customer/Events/events.dart';
 
 import 'package:banquet/Views/Screens/Customer/Hall%20Details/hall_details.dart';
@@ -18,6 +19,8 @@ class CustomerDashboard extends StatefulWidget {
 
 class _CustomerDashboardState extends State<CustomerDashboard> {
   final BanquetController banquetController = Get.put(BanquetController());
+  final CustomerProfileController _customerProfileController =
+      Get.put(CustomerProfileController());
 
   @override
   void initState() {
@@ -53,25 +56,32 @@ class _CustomerDashboardState extends State<CustomerDashboard> {
                   SizedBox(
                     width: 10.w,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Hello!",
-                        style: TextStyle(
-                          color: AppColors.black.withOpacity(0.5),
-                          fontSize: 20,
-                        ),
-                      ),
-                      const Text(
-                        "Alex Jhons",
-                        style: TextStyle(
-                            color: AppColors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],
+                  Obx(
+                    () => _customerProfileController.customer.value.name == ''
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Hello!",
+                                style: TextStyle(
+                                  color: AppColors.black.withOpacity(0.5),
+                                  fontSize: 20,
+                                ),
+                              ),
+                              Text(
+                                _customerProfileController.customer.value.name
+                                    .toString(),
+                                style: const TextStyle(
+                                    color: AppColors.black,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
                   )
                 ],
               ),
@@ -207,32 +217,25 @@ class _CustomerDashboardState extends State<CustomerDashboard> {
               SizedBox(
                 height: 5.h,
               ),
-
-              // Column(
-              //   children: List.generate(
-              //       3,
-              //       (index) => hallCards(onTap: () {
-              //             Navigator.push(
-              //                 context,
-              //                 MaterialPageRoute(
-              //                     builder: (context) => const HallDetails()));
-              //           })),
-              // )
               Obx(
                 () => SizedBox(
                   height: 1.sh / 2,
                   child: ListView.builder(
                     itemCount: banquetController.banquets.length,
                     itemBuilder: (context, index) {
-                      return hallCards(onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HallDetails(
-                                      banquet:
-                                          banquetController.banquets[index],
-                                    )));
-                      });
+                      return hallCards(
+                          banquet: banquetController.banquets[index],
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HallDetails(
+                                          banquet:
+                                              banquetController.banquets[index],
+                                          customer: _customerProfileController
+                                              .customer.value,
+                                        )));
+                          });
                     },
                   ),
                 ),

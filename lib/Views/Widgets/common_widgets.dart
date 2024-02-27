@@ -1,4 +1,5 @@
 import 'package:banquet/App%20Constants/constants.dart';
+import 'package:banquet/Models/banquet_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -38,7 +39,7 @@ Widget appButton({required String title, required VoidCallback onTap}) {
   );
 }
 
-Widget hallCards({required VoidCallback onTap}) {
+Widget hallCards({required Banquet banquet, required VoidCallback onTap}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
     child: GestureDetector(
@@ -73,9 +74,9 @@ Widget hallCards({required VoidCallback onTap}) {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Mashallah Halls',
-                style: TextStyle(
+              Text(
+                banquet.name.toString(),
+                style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                     color: Colors.white),

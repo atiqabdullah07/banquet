@@ -1,11 +1,17 @@
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
+import 'package:banquet/Controllers/banquet_controller.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class BookingRequests extends StatelessWidget {
-  const BookingRequests({super.key});
+  BookingRequests({super.key});
+
+  final BanquetController _banquetController = Get.put(BanquetController());
+  final BanquetProfileController _banquetProfileController =
+      Get.put(BanquetProfileController());
 
   @override
   Widget build(BuildContext context) {
@@ -16,16 +22,37 @@ class BookingRequests extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: ListView.builder(
-            itemCount: 2,
+            itemCount: _banquetController.bookingRequests.length,
             itemBuilder: (context, index) {
-              return bookingRequestCard();
+              var request = _banquetController.bookingRequests[index];
+              return bookingRequestCard(
+                  bookingPrice: request.bookingPrice,
+                  menu: request.menu,
+                  guests: request.guests,
+                  timeSlot: request.timeSlot,
+                  date: request.date,
+                  customerName: request.customer.name!,
+                  onAccept: () {
+                    print(request.uid);
+                    _banquetController.acceptBooking(request.uid);
+                  },
+                  onDecline: () {});
             },
           ),
         ));
   }
 }
 
-Widget bookingRequestCard() {
+Widget bookingRequestCard({
+  required VoidCallback onAccept,
+  required VoidCallback onDecline,
+  required String customerName,
+  required String bookingPrice,
+  required String menu,
+  required String guests,
+  required String timeSlot,
+  required String date,
+}) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 20),
     child: Container(
@@ -55,8 +82,8 @@ Widget bookingRequestCard() {
                     SizedBox(
                       width: 10.w,
                     ),
-                    const Text(
-                      'Ahmad Raza',
+                    Text(
+                      customerName,
                       style: TextStyle(fontSize: 16),
                     ),
                   ],
@@ -73,9 +100,10 @@ Widget bookingRequestCard() {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  bookingsCardCell(title: 'Booking Price', value: 'Rs. 20000'),
-                  bookingsCardCell(title: 'Menu', value: 'Menu 01'),
-                  bookingsCardCell(title: 'Guests', value: '200'),
+                  bookingsCardCell(
+                      title: 'Booking Price', value: 'Rs. $bookingPrice'),
+                  bookingsCardCell(title: 'Menu', value: menu),
+                  bookingsCardCell(title: 'Guests', value: guests),
                 ],
               ),
             ),
@@ -88,7 +116,7 @@ Widget bookingRequestCard() {
               children: [
                 Expanded(
                   child: Text(
-                    'Evening',
+                    timeSlot,
                     style: TextStyle(
                         color: AppColors.primaryColor,
                         fontWeight: FontWeight.bold,
@@ -101,7 +129,7 @@ Widget bookingRequestCard() {
                 Align(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    '26 Jan 2024',
+                    date,
                     style: TextStyle(fontSize: 14.r),
                   ),
                 ),
@@ -111,7 +139,7 @@ Widget bookingRequestCard() {
             Row(
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: onDecline,
                   child: Container(
                     height: 40.h,
                     width: 130,
@@ -134,7 +162,7 @@ Widget bookingRequestCard() {
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: onAccept,
                     child: Container(
                       height: 40.h,
                       width: 130,

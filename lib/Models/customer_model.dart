@@ -1,23 +1,23 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Customer {
-  String name;
-  String profilePhoto;
+  String? name;
+  String? profilePhoto;
   String? email;
   String? uid;
 
-  Customer(
-      {required this.name, this.email, required this.profilePhoto, this.uid});
+  Customer({this.name, this.email, this.profilePhoto, this.uid});
 
-  Map<String, dynamic> toJson() =>
-      {"name": name, "profilePhoto": profilePhoto, "email": email, "uid": uid};
+  Map<String, dynamic> toJson() => {
+        "name": name,
+        "profilePhoto": profilePhoto,
+        "email": email,
+        "uid": uid,
+      };
 
-  static Customer fromSnap(DocumentSnapshot snap) {
-    var snapshot = snap.data() as Map<String, dynamic>;
+  factory Customer.fromJson(Map<String, dynamic> json) {
     return Customer(
-        name: snapshot['name'],
-        email: snapshot['email'],
-        profilePhoto: snapshot['profilePhoto'],
-        uid: snapshot['uid']);
+        name: json['name'],
+        email: json['email'],
+        profilePhoto: json['profilePhoto'],
+        uid: json['uid']);
   }
 }

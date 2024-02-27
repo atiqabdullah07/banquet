@@ -1,8 +1,10 @@
+import 'dart:developer';
+
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
 import 'package:banquet/Models/banquet_model.dart';
 import 'package:banquet/Models/menu_model.dart';
-import 'package:banquet/Views/Screens/Customer/Hall%20Details/hall_details_widgets.dart';
+import 'package:banquet/Models/reservation_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -11,14 +13,65 @@ import 'package:get/get.dart';
 
 class BanquetController extends GetxController {
   RxList<Banquet> banquets = RxList<Banquet>();
+  RxList<Reservation> bookingRequests = RxList<Reservation>();
+  RxList<Reservation> bookings = RxList<Reservation>();
+  @override
+  void onInit() async {
+    super.onInit();
+    await fetchBookingRequests();
+    await fetchBookings();
+  }
 
-  // Method to fetch and append all banquets
+  Future<void> fetchBookings() async {
+    try {
+      var banquetId = FirebaseAuth.instance.currentUser!.uid;
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('banquet')
+          .doc(banquetId)
+          .collection('bookings')
+          .get();
+
+      bookings.clear();
+      bookings.addAll(
+        querySnapshot.docs
+            .map(
+              (doc) => Reservation.fromJson(doc.data() as Map<String, dynamic>),
+            )
+            .toList(),
+      );
+    } catch (e) {
+      print("Error fetching and appending banquets: $e");
+    }
+  }
+
+  Future<void> fetchBookingRequests() async {
+    try {
+      var banquetId = FirebaseAuth.instance.currentUser!.uid;
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('banquet')
+          .doc(banquetId)
+          .collection('bookingRequests')
+          .get();
+
+      bookingRequests.clear();
+      bookingRequests.addAll(
+        querySnapshot.docs
+            .map(
+              (doc) => Reservation.fromJson(doc.data() as Map<String, dynamic>),
+            )
+            .toList(),
+      );
+      print(bookingRequests);
+    } catch (e) {
+      print("Error fetching and appending banquets: $e");
+    }
+  }
+
   Future<void> fetchBanquets() async {
     try {
       QuerySnapshot querySnapshot =
           await FirebaseFirestore.instance.collection('banquet').get();
 
-      // Clear existing items in the RxList and append the new ones
       banquets.clear();
       banquets.addAll(
         querySnapshot.docs
@@ -27,8 +80,6 @@ class BanquetController extends GetxController {
             )
             .toList(),
       );
-
-      print(banquets);
     } catch (e) {
       print("Error fetching and appending banquets: $e");
     }
@@ -44,6 +95,32 @@ class BanquetController extends GetxController {
       await firestore.collection('banquet').doc(currentUserId).update({
         'menu': FieldValue.arrayUnion([menu.toJson()]),
       });
+
+      EasyLoading.dismiss();
+      Get.snackbar('Success', 'Menu Added Successfully');
+
+      print('Menu added successfully');
+    } catch (e) {
+      EasyLoading.dismiss();
+      print('Error adding menu: $e');
+      throw e;
+    }
+  }
+
+  Future<void> sendBookingRequest(Reservation booking, String banquetID) async {
+    try {
+      easyLoading();
+
+      // await firestore.collection('banquet').doc(banquetID).update({
+      //   'bookingRequests': FieldValue.arrayUnion([booking.toJson()]),
+      // });
+      await firestore
+          .collection('banquet')
+          .doc(banquetID)
+          .collection('bookingRequests')
+          .add(
+            booking.toJson(),
+          );
 
       EasyLoading.dismiss();
       Get.snackbar('Success', 'Menu Added Successfully');
@@ -88,10 +165,42 @@ class BanquetController extends GetxController {
       throw e;
     }
   }
+
+  Future<void> acceptBooking(String bookingUid) async {
+    try {
+      CollectionReference banquetCollection =
+          FirebaseFirestore.instance.collection('banquet');
+
+      var banquetId = FirebaseAuth.instance.currentUser!.uid;
+
+      DocumentReference banquetDocRef = banquetCollection.doc(banquetId);
+      QuerySnapshot bookingRequestSnapshot = await banquetDocRef
+          .collection('bookingRequests')
+          .where('uid', isEqualTo: bookingUid)
+          .get();
+
+      if (bookingRequestSnapshot.docs.isNotEmpty) {
+        DocumentSnapshot bookingRequestDoc = bookingRequestSnapshot.docs.first;
+
+        // Move the booking request to the 'bookings' collection
+
+        await banquetDocRef
+            .collection('bookings')
+            .add(bookingRequestDoc.data() as Map<String, dynamic>);
+
+        // Remove the booking request from the 'bookingRequests' subcollection
+        await bookingRequestDoc.reference.delete();
+      } else {
+        print('Booking request not found');
+      }
+    } catch (e) {
+      print('Error moving booking: $e');
+      throw e;
+    }
+  }
 }
 
 class BanquetProfileController extends GetxController {
-  RxString banquetname = ''.obs;
   Rx<Banquet> myBanquet = Banquet().obs;
 
   @override
@@ -102,37 +211,25 @@ class BanquetProfileController extends GetxController {
 
   Future<void> getAuthenticatedUserBanquetInfo() async {
     try {
-      final FirebaseAuth _auth = FirebaseAuth.instance;
-      final CollectionReference _banquetCollection =
+      final FirebaseAuth auth = FirebaseAuth.instance;
+      final CollectionReference banquetCollection =
           FirebaseFirestore.instance.collection('banquet');
 
-      // Check if a user is authenticated
-      User? user = _auth.currentUser;
-      if (user == null) {
-        return null; // User not authenticated
-      }
+      User? user = auth.currentUser;
 
-      // Get the document snapshot from the 'banquet' collection using the user's UID
-      DocumentSnapshot userDoc = await _banquetCollection.doc(user.uid).get();
+      DocumentSnapshot userDoc = await banquetCollection.doc(user!.uid).get();
 
-      //print(userDoc);
-
-      // Check if the document exists
       if (userDoc.exists) {
-        // Map the data from the document snapshot to your Banquet model
-        // banquet = Banquet.fromJson(userDoc.data() as Map<String, dynamic>)
-        //     as Rx<Banquet>;
         var banquet = Banquet.fromJson(userDoc.data() as Map<String, dynamic>);
-        print(banquet.name);
-        banquetname.value = banquet.name!;
 
         myBanquet.value = banquet;
+        print('myBanquet');
+        print(myBanquet.value.bookingRequests);
       } else {
-        return null; // Document not found
+        log('error');
       }
     } catch (e) {
-      print("Error fetching user data: $e");
-      return null;
+      log("Error fetching user data: $e");
     }
   }
 }

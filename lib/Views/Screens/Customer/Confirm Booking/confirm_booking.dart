@@ -1,24 +1,36 @@
+import 'dart:math';
+
 import 'package:banquet/App%20Constants/constants.dart';
+import 'package:banquet/Controllers/banquet_controller.dart';
+import 'package:banquet/Models/banquet_model.dart';
+import 'package:banquet/Models/customer_model.dart';
+import 'package:banquet/Models/reservation_model.dart';
 import 'package:banquet/Views/Screens/Customer/Confirm%20Booking/confirm_booking_widgets.dart';
 import 'package:banquet/Views/Screens/Customer/Hall%20Details/hall_details_widgets.dart';
 
 import 'package:banquet/Views/Widgets/common_widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class ConfirmBooking extends StatefulWidget {
-  const ConfirmBooking({super.key});
-
+  const ConfirmBooking(
+      {super.key, required this.banquet, required this.customer});
+  final Banquet banquet;
+  final Customer customer;
   @override
   State<ConfirmBooking> createState() => _ConfirmBookingState();
 }
 
 class _ConfirmBookingState extends State<ConfirmBooking> {
-  var selectedTime = 'Morning';
-
+  final BanquetController _banquetController = Get.put(BanquetController());
+  var _selectedTime = 'Morning';
+  var _selectedDate = DateTime.now().toString();
   var _guests = 100;
   void _incrementguests() {
     setState(
@@ -42,8 +54,6 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
 
   @override
   Widget build(BuildContext context) {
-    var selectedDate = DateTime.now().toString();
-
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
@@ -67,7 +77,7 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                   selectionColor: AppColors.primaryColor,
                   onSelectionChanged:
                       (DateRangePickerSelectionChangedArgs args) {
-                    selectedDate = args.value.toString();
+                    _selectedDate = args.value.toString();
                   },
                 ),
               ),
@@ -79,13 +89,13 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      if (selectedTime == 'Morning') {
+                      if (_selectedTime == 'Morning') {
                         setState(() {
-                          selectedTime = 'Evening';
+                          _selectedTime = 'Evening';
                         });
-                      } else if (selectedTime == 'Evening') {
+                      } else if (_selectedTime == 'Evening') {
                         setState(() {
-                          selectedTime = 'Morning';
+                          _selectedTime = 'Morning';
                         });
                       }
                     },
@@ -93,7 +103,7 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                       height: 45.h,
                       width: 120.w,
                       decoration: BoxDecoration(
-                        color: selectedTime == 'Morning'
+                        color: _selectedTime == 'Morning'
                             ? AppColors.primaryColor
                             : Colors.white,
                         borderRadius: BorderRadius.circular(100),
@@ -105,7 +115,7 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                         child: Text(
                           'Morning',
                           style: TextStyle(
-                              color: selectedTime == 'Morning'
+                              color: _selectedTime == 'Morning'
                                   ? Colors.white
                                   : AppColors.black,
                               fontSize: 14),
@@ -118,13 +128,13 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      if (selectedTime == 'Morning') {
+                      if (_selectedTime == 'Morning') {
                         setState(() {
-                          selectedTime = 'Evening';
+                          _selectedTime = 'Evening';
                         });
-                      } else if (selectedTime == 'Evening') {
+                      } else if (_selectedTime == 'Evening') {
                         setState(() {
-                          selectedTime = 'Morning';
+                          _selectedTime = 'Morning';
                         });
                       }
                     },
@@ -132,7 +142,7 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                       height: 45.h,
                       width: 120.w,
                       decoration: BoxDecoration(
-                        color: selectedTime == 'Evening'
+                        color: _selectedTime == 'Evening'
                             ? AppColors.primaryColor
                             : Colors.white,
                         borderRadius: BorderRadius.circular(100),
@@ -144,7 +154,7 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                         child: Text(
                           'Evening',
                           style: TextStyle(
-                              color: selectedTime == 'Evening'
+                              color: _selectedTime == 'Evening'
                                   ? Colors.white
                                   : AppColors.black,
                               fontSize: 14),
@@ -158,9 +168,18 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                 height: 15.h,
               ),
               subTitleText(title: 'Select Menu'),
-              const Menu(),
-              const Menu(),
-              const Menu(),
+              widget.banquet.menu!.isEmpty
+                  ? const Center(
+                      child: Text('No Menu by the Banquet'),
+                    )
+                  : Column(
+                      children: List.generate(
+                        widget.banquet.menu!.length,
+                        (index) => Menu(
+                          menu: widget.banquet.menu![index],
+                        ),
+                      ),
+                    ),
               SizedBox(
                 height: 15.h,
               ),
@@ -223,7 +242,27 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
               SizedBox(
                 height: 50.h,
               ),
-              Center(child: appButton(title: 'Send Request', onTap: () {})),
+              Center(
+                child: appButton(
+                  title: 'Send Request',
+                  onTap: () {
+                    _banquetController.sendBookingRequest(
+                        Reservation(
+                          bookingPrice: 'price',
+                          menu: 'menu',
+                          guests: _guests.toString(),
+                          timeSlot: _selectedTime,
+                          date: _selectedDate,
+                          uid: DateTime.now()
+                                  .millisecondsSinceEpoch
+                                  .toRadixString(16) +
+                              Random().nextInt(1000).toRadixString(16),
+                          customer: widget.customer,
+                        ),
+                        widget.banquet.uid.toString());
+                  },
+                ),
+              ),
               SizedBox(
                 height: 100.h,
               ),

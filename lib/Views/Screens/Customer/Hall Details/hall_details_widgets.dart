@@ -1,12 +1,15 @@
 import 'package:accordion/accordion.dart';
 import 'package:banquet/App%20Constants/constants.dart';
+import 'package:banquet/Models/menu_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Menu extends StatelessWidget {
   const Menu({
     super.key,
+    required this.menu,
   });
+  final PackageMenu menu;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +33,7 @@ class Menu extends StatelessWidget {
         headerPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         children: [
           AccordionSection(
-              header: const Text('Menu 1'),
+              header: Text(menu.name),
               content: Column(
                 children: [
                   Row(
@@ -39,11 +42,9 @@ class Menu extends StatelessWidget {
                     children: [
                       Expanded(
                         child: menuSection(
-                          icon: 'assets/icons/restaurant.png',
-                          title: 'Main Course',
-                          content:
-                              'Chicken Boti TikkaSeekh KababChicken Biryani / PulaoChicken QormaPalak PaneerNaan (Live Tandoor)Salad (3 Types)Chatni + Raita',
-                        ),
+                            icon: 'assets/icons/restaurant.png',
+                            title: 'Main Course',
+                            content: menu.mainCourse),
                       ),
                       SizedBox(
                         width: 20.w,
@@ -54,7 +55,7 @@ class Menu extends StatelessWidget {
                             menuSection(
                               icon: 'assets/icons/icecream.png',
                               title: 'Desserts',
-                              content: 'Fruit, Halwa, Shahi Tukra, TrifleGajar',
+                              content: menu.desserts!,
                             ),
                             SizedBox(
                               height: 15.h,
@@ -62,7 +63,7 @@ class Menu extends StatelessWidget {
                             menuSection(
                               icon: 'assets/icons/wine_bar.png',
                               title: 'Drinks',
-                              content: 'Cold Drinks & Mineral Water, Green Tea',
+                              content: menu.drinks!,
                             ),
                           ],
                         ),
@@ -72,17 +73,17 @@ class Menu extends StatelessWidget {
                   SizedBox(
                     height: 10.h,
                   ),
-                  const Row(
+                  Row(
                     children: [
-                      Text('Price:'),
+                      const Text('Price:'),
                       Text(
-                        '1200/',
-                        style: TextStyle(
+                        "${menu.price.toString()}/",
+                        style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: AppColors.black),
                       ),
-                      Text('Perosn'),
+                      const Text('Perosn'),
                     ],
                   )
                 ],

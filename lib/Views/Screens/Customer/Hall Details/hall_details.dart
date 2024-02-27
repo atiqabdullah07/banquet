@@ -1,6 +1,7 @@
 import 'package:another_carousel_pro/another_carousel_pro.dart';
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/Models/banquet_model.dart';
+import 'package:banquet/Models/customer_model.dart';
 import 'package:banquet/Views/Screens/Customer/Confirm%20Booking/confirm_booking.dart';
 import 'package:banquet/Views/Screens/Customer/Hall%20Details/hall_details_widgets.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
@@ -8,9 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HallDetails extends StatefulWidget {
-  const HallDetails({super.key, required this.banquet});
+  const HallDetails({super.key, required this.banquet, required this.customer});
 
   final Banquet banquet;
+  final Customer customer;
 
   @override
   State<HallDetails> createState() => _HallDetailsState();
@@ -108,9 +110,18 @@ class _HallDetailsState extends State<HallDetails> {
                     height: 10.h,
                   ),
                   subTitleText(title: 'Menu'),
-                  const Menu(),
-                  const Menu(),
-                  const Menu(),
+                  widget.banquet.menu!.isEmpty
+                      ? const Center(
+                          child: Text('No Menu by the Banquet'),
+                        )
+                      : Column(
+                          children: List.generate(
+                            widget.banquet.menu!.length,
+                            (index) => Menu(
+                              menu: widget.banquet.menu![index],
+                            ),
+                          ),
+                        )
                 ],
               ),
             ),
@@ -123,7 +134,10 @@ class _HallDetailsState extends State<HallDetails> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const ConfirmBooking()));
+                          builder: (context) => ConfirmBooking(
+                                banquet: widget.banquet,
+                                customer: widget.customer,
+                              )));
                 }),
             const SizedBox(
               height: 100,
