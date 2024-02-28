@@ -41,7 +41,7 @@ void main() async {
             debugShowCheckedModeBanner: false,
             builder: EasyLoading.init(),
             title: 'Banquet',
-            home: BanquetDashboard());
+            home: const CategoreyPage());
       },
     ),
   );
