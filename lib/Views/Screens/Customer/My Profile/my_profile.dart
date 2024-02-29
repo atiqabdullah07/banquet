@@ -5,6 +5,8 @@ import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
 import 'package:banquet/Controllers/auth_controller.dart';
 import 'package:banquet/Views/Screens/Customer/Bookings/bookings.dart';
+import 'package:banquet/Views/Screens/Customer/My%20Profile/edit_customer_profile.dart';
+
 import 'package:banquet/Views/Screens/Customer/My%20Profile/my_profile_widgets.dart';
 import 'package:banquet/Views/Screens/Customer/Wishlist/wishlist.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
@@ -54,9 +56,18 @@ class _MyProfileState extends State<MyProfile> {
         title: const Text('Profile'),
         centerTitle: true,
         actions: [
-          logoutButton(onTap: () {
-            authController.signOut();
-          })
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EditCustomerProfile()));
+            },
+            child: const Text(
+              'Edit Profile',
+              style: TextStyle(color: AppColors.black),
+            ),
+          )
         ],
       ),
       body: Padding(
@@ -113,12 +124,6 @@ class _MyProfileState extends State<MyProfile> {
                           builder: (context) => const MyBookings()));
                 }),
             height(100),
-            appButton(
-                title: 'Upload',
-                onTap: () {
-                  print('Uploading');
-                  authController.uploadToStorage(pickedImage!);
-                })
           ],
         ),
       ),

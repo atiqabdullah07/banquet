@@ -34,15 +34,6 @@ class _BanquetDashboardState extends State<BanquetDashboard> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.backgroundColor,
-        appBar: AppBar(
-          title: ElevatedButton(
-              onPressed: () {
-                _banquetController.fetchBookingRequests();
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => AddMenu()));
-              },
-              child: Text('Test')),
-        ),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),

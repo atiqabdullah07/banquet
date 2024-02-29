@@ -61,6 +61,7 @@ class BanquetController extends GetxController {
             )
             .toList(),
       );
+      print('Booking Requests');
       print(bookingRequests);
     } catch (e) {
       print("Error fetching and appending banquets: $e");
@@ -110,10 +111,6 @@ class BanquetController extends GetxController {
   Future<void> sendBookingRequest(Reservation booking, String banquetID) async {
     try {
       easyLoading();
-
-      // await firestore.collection('banquet').doc(banquetID).update({
-      //   'bookingRequests': FieldValue.arrayUnion([booking.toJson()]),
-      // });
       await firestore
           .collection('banquet')
           .doc(banquetID)
@@ -125,11 +122,11 @@ class BanquetController extends GetxController {
       EasyLoading.dismiss();
       Get.snackbar('Success', 'Menu Added Successfully');
 
-      print('Menu added successfully');
+      log('Menu added successfully');
     } catch (e) {
       EasyLoading.dismiss();
-      print('Error adding menu: $e');
-      throw e;
+      log('Error adding menu: $e');
+      rethrow;
     }
   }
 
