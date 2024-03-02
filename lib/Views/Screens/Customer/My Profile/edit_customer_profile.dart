@@ -151,18 +151,27 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                         ),
                         height(100),
                         Center(
-                          child: appButton(
-                            title: 'Save Changes',
-                            onTap: () {
-                              _customerProfileController.updateCustomerProfile(
-                                  Customer(
-                                      name: nameController.text,
-                                      profilePhoto: _customerProfileController
-                                          .customer.value.profilePhoto),
-                                  pickedImage);
+                          child: Column(
+                            children: [
+                              appButton(
+                                title: 'Save Changes',
+                                onTap: () async {
+                                  await _customerProfileController
+                                      .updateCustomerProfile(
+                                          Customer(
+                                              name: nameController.text,
+                                              profilePhoto:
+                                                  _customerProfileController
+                                                      .customer
+                                                      .value
+                                                      .profilePhoto),
+                                          pickedImage);
 
-                              _customerProfileController.getCustomer();
-                            },
+                                  await _customerProfileController
+                                      .getCustomer();
+                                },
+                              ),
+                            ],
                           ),
                         )
                       ],

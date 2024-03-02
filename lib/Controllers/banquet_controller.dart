@@ -18,8 +18,8 @@ class BanquetController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    await fetchBookingRequests();
     await fetchBookings();
+    await fetchBookingRequests();
   }
 
   Future<void> fetchBookings() async {
@@ -39,6 +39,8 @@ class BanquetController extends GetxController {
             )
             .toList(),
       );
+
+      print('Bookings :$bookings');
     } catch (e) {
       print("Error fetching and appending banquets: $e");
     }

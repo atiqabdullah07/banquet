@@ -43,7 +43,7 @@ void main() async {
           debugShowCheckedModeBanner: false,
           builder: EasyLoading.init(),
           title: 'Banquet',
-          home: const CustomerHome(),
+          home: const CategoreyPage(),
         );
       },
     ),

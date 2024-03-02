@@ -34,110 +34,109 @@ class _BanquetDashboardState extends State<BanquetDashboard> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.backgroundColor,
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        body: Obx(() {
+          if (_banquetProfileController.myBanquet.value.name == null) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const BanquetProfile()));
-                          },
-                          child: CircleAvatar(
-                            radius: 40.r,
-                            backgroundColor: AppColors.black.withOpacity(0.5),
-                            child: CircleAvatar(
-                              radius: 38.r,
-                              backgroundColor: AppColors.black.withOpacity(0.5),
-                              backgroundImage: const NetworkImage(
-                                  "https://images-platform.99static.com/8o4gbZyhGRrmCBJKnX4GlKZ-9EA=/265x41:1552x1328/500x500/top/smart/99designs-contests-attachments/91/91413/attachment_91413639"),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10.w,
-                        ),
-                        Obx(
-                          () => _banquetProfileController
-                                      .myBanquet.value.name ==
-                                  ''
-                              ? const Center(
-                                  child: CircularProgressIndicator(),
-                                )
-                              : Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Hello!",
-                                      style: TextStyle(
-                                        color: AppColors.black.withOpacity(0.5),
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                    Text(
-                                      _banquetProfileController
-                                          .myBanquet.value.name
-                                          .toString(),
-                                      style: const TextStyle(
-                                          color: AppColors.black,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const BanquetProfile()));
+                              },
+                              child: CircleAvatar(
+                                radius: 40.r,
+                                backgroundColor:
+                                    AppColors.black.withOpacity(0.5),
+                                child: CircleAvatar(
+                                  radius: 38.r,
+                                  backgroundColor:
+                                      AppColors.black.withOpacity(0.5),
+                                  backgroundImage: const NetworkImage(
+                                      "https://images-platform.99static.com/8o4gbZyhGRrmCBJKnX4GlKZ-9EA=/265x41:1552x1328/500x500/top/smart/99designs-contests-attachments/91/91413/attachment_91413639"),
                                 ),
-                        )
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10.w,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Hello!",
+                                  style: TextStyle(
+                                    color: AppColors.black.withOpacity(0.5),
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                Text(
+                                  _banquetProfileController.myBanquet.value.name
+                                      .toString(),
+                                  style: const TextStyle(
+                                      color: AppColors.black,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => BookingRequests()));
+                            },
+                            icon: const Icon(
+                              Icons.notifications_outlined,
+                              size: 30,
+                            ))
                       ],
                     ),
-                    IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => BookingRequests()));
-                        },
-                        icon: const Icon(
-                          Icons.notifications_outlined,
-                          size: 30,
-                        ))
+                    height(20),
+                    titleText(title: 'My Bookings'),
+                    height(10),
+                    _banquetController.bookings.isEmpty
+                        ? const Center(
+                            child: Text('No Booking'),
+                          )
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: List.generate(
+                                _banquetController.bookings.length, (index) {
+                              var booking = _banquetController.bookings[index];
+                              return bookingCard(
+                                  bookingPrice: booking.bookingPrice,
+                                  menu: booking.menu,
+                                  guests: booking.guests,
+                                  timeSlot: booking.timeSlot,
+                                  date: booking.date);
+                            }),
+                          ),
                   ],
                 ),
-                height(20),
-                titleText(title: 'My Bookings'),
-                height(10),
-                Obx(
-                  () => _banquetController.bookings.isEmpty
-                      ? Center(
-                          child: Text('No Bookings'),
-                        )
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: List.generate(
-                              _banquetController.bookings.length, (index) {
-                            var booking = _banquetController.bookings[index];
-                            return bookingCard(
-                                bookingPrice: booking.bookingPrice,
-                                menu: booking.menu,
-                                guests: booking.guests,
-                                timeSlot: booking.timeSlot,
-                                date: booking.date);
-                          }),
-                        ),
-                )
-              ],
-            ),
-          ),
-        ),
+              ),
+            );
+          }
+        }),
       ),
     );
   }
