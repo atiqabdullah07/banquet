@@ -46,7 +46,7 @@ class _CustomerDashboardState extends State<CustomerDashboard> {
                         backgroundColor: AppColors.black,
                         child: CircleAvatar(
                           radius: 38.r,
-                          backgroundColor: Colors.green,
+                          backgroundColor: Colors.grey.withOpacity(0.5),
                           backgroundImage: const NetworkImage(
                               "https://abouteball.com/wp-content/uploads/2015/03/photodune-4276142-smiling-portraits-m1.jpg"),
                         ),

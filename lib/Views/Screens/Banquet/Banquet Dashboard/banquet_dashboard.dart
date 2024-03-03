@@ -57,20 +57,37 @@ class _BanquetDashboardState extends State<BanquetDashboard> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const BanquetProfile()));
+                                            BanquetProfile()));
                               },
-                              child: CircleAvatar(
-                                radius: 40.r,
-                                backgroundColor:
-                                    AppColors.black.withOpacity(0.5),
-                                child: CircleAvatar(
-                                  radius: 38.r,
-                                  backgroundColor:
-                                      AppColors.black.withOpacity(0.5),
-                                  backgroundImage: const NetworkImage(
-                                      "https://images-platform.99static.com/8o4gbZyhGRrmCBJKnX4GlKZ-9EA=/265x41:1552x1328/500x500/top/smart/99designs-contests-attachments/91/91413/attachment_91413639"),
-                                ),
-                              ),
+                              child: _banquetProfileController
+                                              .myBanquet.value.logo ==
+                                          null ||
+                                      _banquetProfileController
+                                              .myBanquet.value.logo ==
+                                          ''
+                                  ? CircleAvatar(
+                                      radius: 40.r,
+                                      backgroundColor: AppColors.secondaryColor,
+                                      child: Icon(
+                                        Icons.person,
+                                        size: 40.r,
+                                      ),
+                                    )
+                                  : CircleAvatar(
+                                      radius: 40.r,
+                                      backgroundColor:
+                                          AppColors.black.withOpacity(0.5),
+                                      child: CircleAvatar(
+                                        radius: 38.r,
+                                        backgroundColor:
+                                            AppColors.black.withOpacity(0.5),
+                                        backgroundImage: NetworkImage(
+                                          _banquetProfileController
+                                              .myBanquet.value.logo
+                                              .toString(),
+                                        ),
+                                      ),
+                                    ),
                             ),
                             SizedBox(
                               width: 10.w,

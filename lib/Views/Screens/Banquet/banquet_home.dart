@@ -1,5 +1,6 @@
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/Views/Screens/Banquet/Banquet%20Dashboard/banquet_dashboard.dart';
+import 'package:banquet/Views/Screens/Banquet/Banquet%20Profile/banquet_profile.dart';
 import 'package:banquet/Views/Screens/Banquet/Setup%20Profile/setup_profile01.dart';
 import 'package:banquet/Views/Screens/Chats/conversations.dart';
 
@@ -18,39 +19,42 @@ class _HomeState extends State<BanquetHome> {
   final List<Widget> _pages = [
     BanquetDashboard(),
     const Conversations(),
-    const SetupProfile01(),
+    BanquetProfile(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        elevation: 10,
-        currentIndex: _currentIndex,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: AppColors.primaryColor,
-        unselectedItemColor: AppColors.black.withOpacity(0.5),
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message),
-            label: 'Chats',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        body: _pages[_currentIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.white,
+          elevation: 10,
+          currentIndex: _currentIndex,
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: AppColors.primaryColor,
+          unselectedItemColor: AppColors.black.withOpacity(0.5),
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.message),
+              label: 'Chats',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Profile',
+            ),
+          ],
+        ),
       ),
     );
   }

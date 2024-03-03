@@ -5,6 +5,7 @@ import 'package:banquet/Views/Widgets/common_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 
 class SignUp extends StatelessWidget {
   SignUp({super.key, required this.role});
@@ -44,11 +45,13 @@ class SignUp extends StatelessWidget {
                 AppTextField(
                   hintText: 'Enter Password',
                   controller: passwordController,
+                  isObsecure: true,
                 ),
                 height(15),
                 AppTextField(
                   hintText: 'Enter Confirm Password',
                   controller: confirmPasswordController,
+                  isObsecure: true,
                 ),
                 height(35),
                 CustomButton(

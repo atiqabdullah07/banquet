@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
@@ -7,11 +8,14 @@ import 'package:banquet/Models/menu_model.dart';
 import 'package:banquet/Models/reservation_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:get/get.dart';
 
 class BanquetController extends GetxController {
+  final BanquetProfileController _banquetProfileController =
+      Get.put(BanquetProfileController());
   RxList<Banquet> banquets = RxList<Banquet>();
   RxList<Reservation> bookingRequests = RxList<Reservation>();
   RxList<Reservation> bookings = RxList<Reservation>();
@@ -88,6 +92,35 @@ class BanquetController extends GetxController {
     }
   }
 
+  Future<String> uploadProfilePic(File image) async {
+    late String imageURL = '';
+
+    try {
+      final imgId = DateTime.now().millisecondsSinceEpoch.toString();
+      final storageRef = FirebaseStorage.instance.ref('Profile Pics');
+      final imgRef = storageRef.child('path_$imgId');
+
+      // Upload the new file
+      await imgRef.putFile(image).catchError((error) {
+        log("Error uploading image: $error");
+        return null;
+      });
+
+      try {
+        // Get the download URL for the new file
+        var url = await imgRef.getDownloadURL();
+        imageURL = url;
+      } catch (error) {
+        log("Error getting download URL: $error");
+      }
+
+      return imageURL;
+    } catch (e) {
+      log('Catch Block of uploadFile: ${e.toString()}');
+      return imageURL; // Return a default value on failure
+    }
+  }
+
   Future<void> addMenu(PackageMenu menu) async {
     try {
       easyLoading();
@@ -100,6 +133,8 @@ class BanquetController extends GetxController {
       });
 
       EasyLoading.dismiss();
+      await _banquetProfileController.getAuthenticatedUserBanquetInfo();
+
       Get.snackbar('Success', 'Menu Added Successfully');
 
       print('Menu added successfully');
@@ -132,16 +167,20 @@ class BanquetController extends GetxController {
     }
   }
 
-  Future<void> updateBanquetInfoForCurrentUser(Banquet banquet) async {
+  Future<void> updateBanquetInfoForCurrentUser(
+      Banquet banquet, File image) async {
     try {
       easyLoading();
       // Get the UID of the currently authenticated user
       String currentUserId = firebaseAuth.currentUser!.uid;
 
+      String banquetLogo = await uploadProfilePic(image);
+
       // Update the corresponding document in the 'banquet' collection
       await firestore.collection('banquet').doc(currentUserId).update(
         {
           'venueType': banquet.venueType,
+          'logo': banquetLogo,
           'parkingCapacity': banquet.parkingCapacity,
           'guestsCapacity': banquet.guestsCapacity,
           'bookingPrice': banquet.bookingPrice,
@@ -150,9 +189,10 @@ class BanquetController extends GetxController {
           'location': banquet.location,
         },
       ).then(
-        (value) {
+        (value) async {
           EasyLoading.dismiss();
-          Get.snackbar('Sucess', "Data Added Successfully");
+          await _banquetProfileController.getAuthenticatedUserBanquetInfo();
+          Get.snackbar('Sucess', "Profile Edited Successfully");
         },
       );
       EasyLoading.dismiss();

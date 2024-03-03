@@ -1,18 +1,31 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
 import 'package:banquet/Controllers/auth_controller.dart';
 import 'package:banquet/Views/Screens/Auth/signup.dart';
+import 'package:banquet/Views/Screens/Banquet/banquet_home.dart';
+
+import 'package:banquet/Views/Screens/Customer/customer_home.dart';
 
 import 'package:banquet/Views/Widgets/common_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   Login({super.key, required this.role});
   final String role;
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
   final AuthController authController = Get.put(AuthController());
+
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
 
   @override
@@ -40,13 +53,32 @@ class Login extends StatelessWidget {
                   AppTextField(
                     hintText: 'Enter Password',
                     controller: passwordController,
+                    isObsecure: true,
                   ),
                   height(35),
                   CustomButton(
                     title: 'Login',
-                    onPress: () {
-                      authController.loginUser(
-                          emailController.text, passwordController.text, role);
+                    onPress: () async {
+                      bool isLoggedIn = await authController.loginUser(
+                          emailController.text,
+                          passwordController.text,
+                          widget.role);
+
+                      if (isLoggedIn == true) {
+                        if (widget.role == 'customer') {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const CustomerHome()),
+                          );
+                        } else if (widget.role == 'banquet') {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const BanquetHome()),
+                          );
+                        }
+                      }
                     },
                   ),
                   height(150)
@@ -65,7 +97,7 @@ class Login extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => SignUp(
-                                      role: role,
+                                      role: widget.role,
                                     )));
                       },
                       child: const Text(

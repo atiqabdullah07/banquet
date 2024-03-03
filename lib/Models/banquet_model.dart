@@ -22,15 +22,13 @@ class Banquet {
     this.uid,
     this.email,
     this.logo,
-    this.venueType,
-    this.parkingCapacity,
-    this.guestsCapacity,
-    this.bookingPrice,
-    this.facilities,
-    this.description,
+    this.venueType = '',
+    this.parkingCapacity = '',
+    this.guestsCapacity = '',
+    this.bookingPrice = '',
+    this.facilities = '',
+    this.description = '',
     this.location,
-    this.bookingRequests = const [],
-    this.bookings = const [],
     this.menu = const [], // Initialize with an empty list
   });
 
@@ -47,16 +45,7 @@ class Banquet {
       facilities: json['facilities'],
       description: json['description'],
       location: json['location'],
-      bookingRequests: (json['bookingRequests'] as List<dynamic>?)
-              ?.map((bookingRequestsJson) => Reservation.fromJson(
-                  bookingRequestsJson as Map<String, dynamic>))
-              .toList() ??
-          [],
-      bookings: (json['bookings'] as List<dynamic>?)
-              ?.map((bookingJson) =>
-                  Reservation.fromJson(bookingJson as Map<String, dynamic>))
-              .toList() ??
-          [],
+
       menu: (json['menu'] as List<dynamic>?)
               ?.map((menuJson) =>
                   PackageMenu.fromJson(menuJson as Map<String, dynamic>))
@@ -78,10 +67,6 @@ class Banquet {
       'facilities': facilities,
       'description': description,
       'location': location,
-      'bookingRequests': bookingRequests
-          ?.map((bookingRequest) => bookingRequest.toJson())
-          .toList(),
-      'bookings': bookings?.map((booking) => booking.toJson()).toList(),
       'menu': menu?.map((menuItem) => menuItem.toJson()).toList(),
     };
   }

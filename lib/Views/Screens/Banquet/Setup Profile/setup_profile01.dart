@@ -257,16 +257,17 @@ class _SetupProfile01State extends State<SetupProfile01> {
                         title: 'Continue',
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
-                            banquetController
-                                .updateBanquetInfoForCurrentUser(Banquet(
-                              venueType: selectedValue.toString(),
-                              parkingCapacity: _parkingController.text,
-                              guestsCapacity: _guestsController.text,
-                              bookingPrice: _bookingPriceController.text,
-                              facilities: _facilitiesController.text,
-                              description: _descriptionController.text,
-                              location: _locationController.text,
-                            ));
+                            banquetController.updateBanquetInfoForCurrentUser(
+                                Banquet(
+                                  venueType: selectedValue.toString(),
+                                  parkingCapacity: _parkingController.text,
+                                  guestsCapacity: _guestsController.text,
+                                  bookingPrice: _bookingPriceController.text,
+                                  facilities: _facilitiesController.text,
+                                  description: _descriptionController.text,
+                                  location: _locationController.text,
+                                ),
+                                pickedImage!);
                           }
                         },
                       ),

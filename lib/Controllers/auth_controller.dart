@@ -128,9 +128,9 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> loginUser(String email, String password, String role) async {
+  Future<bool> loginUser(String email, String password, String role) async {
+    bool isLoggedIn = false;
     try {
-      print(role);
       easyLoading();
       if (email.isNotEmpty && password.isNotEmpty) {
         UserCredential cred = await firebaseAuth.signInWithEmailAndPassword(
@@ -145,11 +145,12 @@ class AuthController extends GetxController {
         if (userDoc.exists) {
           // User does not exist in the 'customers' collection
           EasyLoading.dismiss();
-          if (role == 'customer') {
-            Get.to(const CustomerHome());
-          } else if (role == 'banquet') {
-            Get.to(const BanquetHome());
-          }
+          isLoggedIn = true;
+          // if (role == 'customer') {
+          //   Get.to(const CustomerHome());
+          // } else if (role == 'banquet') {
+          //   Get.to(const BanquetHome());
+          // }
         } else {
           EasyLoading.dismiss();
 
@@ -164,5 +165,7 @@ class AuthController extends GetxController {
       Get.snackbar('Error', 'Wrong Email or Passowrd');
       log('Catch Block of Login User: ${e.toString()}');
     }
+
+    return isLoggedIn;
   }
 }

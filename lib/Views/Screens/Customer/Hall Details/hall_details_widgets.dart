@@ -164,12 +164,16 @@ Widget hallDetailsCard(
             SizedBox(
               height: 2.h,
             ),
-            Text(
-              value,
-              style: const TextStyle(
-                  fontSize: 16,
+            SingleChildScrollView(
+              child: Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 14,
+                  overflow: TextOverflow.ellipsis,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.primaryColor),
+                  color: AppColors.primaryColor,
+                ),
+              ),
             )
           ],
         ),

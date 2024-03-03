@@ -22,35 +22,6 @@ class CustomerProfileController extends GetxController {
     await getCustomer();
   }
 
-  // Future<String> uploadProfilePic(
-  //   File image,
-  // ) async {
-  //   late String imageURL = '';
-
-  //   try {
-  //     final imgId = DateTime.now().millisecondsSinceEpoch.toString();
-  //     final storageRef = FirebaseStorage.instance.ref('Profile Pics');
-  //     final imgRef = storageRef.child('path_$imgId');
-
-  //     await imgRef.putFile(image).catchError((error) {
-  //       log("Error uploading image: $error");
-  //       return null;
-  //     });
-
-  //     try {
-  //       var url = await imgRef.getDownloadURL();
-  //       imageURL = url;
-  //     } catch (error) {
-  //       log("Error getting download URL: $error");
-  //     }
-
-  //     return imageURL;
-  //   } catch (e) {
-  //     log('Catch Block of uploadFile: ${e.toString()}');
-  //     return imageURL; // Return a default value on failure
-  //   }
-  // }
-
   Future<String> uploadProfilePic(File image, String? existingImageUrl) async {
     late String imageURL = '';
 

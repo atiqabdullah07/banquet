@@ -1,7 +1,6 @@
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
 import 'package:banquet/Controllers/banquet_controller.dart';
-import 'package:banquet/Models/banquet_model.dart';
 import 'package:banquet/Models/menu_model.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +29,7 @@ class _AddMenuState extends State<AddMenu> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Setup Banquet Profile'),
+        title: const Text('New Menu'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -162,10 +161,9 @@ class _AddMenuState extends State<AddMenu> {
                     height(00),
                     Center(
                       child: appButton(
-                        title: 'Continue',
+                        title: 'Add New',
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
-                            print('Hi');
                             banquetController.addMenu(
                               PackageMenu(
                                   name: _packageNameController.text,
