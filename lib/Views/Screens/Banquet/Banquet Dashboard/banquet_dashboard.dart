@@ -5,6 +5,7 @@ import 'package:banquet/Models/banquet_model.dart';
 
 import 'package:banquet/Views/Screens/Banquet/Banquet%20Profile/banquet_profile.dart';
 import 'package:banquet/Views/Screens/Banquet/Booking%20Request/booking_requests.dart';
+import 'package:banquet/Views/Screens/Banquet/Events/banquet_events.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
 
 import 'package:flutter/material.dart';
@@ -24,6 +25,12 @@ class _BanquetDashboardState extends State<BanquetDashboard> {
       Get.put(BanquetProfileController());
   Banquet? banquet;
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  void _openDrawer() {
+    _scaffoldKey.currentState?.openDrawer();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -33,7 +40,50 @@ class _BanquetDashboardState extends State<BanquetDashboard> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: _scaffoldKey,
         backgroundColor: AppColors.backgroundColor,
+        drawer: Drawer(
+          backgroundColor: Colors.white,
+          child: ListView(
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(
+                  color: AppColors.secondaryColor,
+                ),
+                child: Center(
+                  child: Text(
+                    'Banquet',
+                    style: TextStyle(
+                      color: AppColors.primaryColor,
+                      fontSize: 24,
+                    ),
+                  ),
+                ),
+              ),
+              ListTile(
+                title: const Text('Event Posts'),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const BanquetEvents()));
+                },
+              ),
+              ListTile(
+                title: const Text('Food Posts'),
+                onTap: () {},
+              ),
+              ListTile(
+                title: const Text('Advertisements'),
+                onTap: () {},
+              ),
+              ListTile(
+                title: const Text('History'),
+                onTap: () {},
+              ),
+            ],
+          ),
+        ),
         body: Obx(() {
           if (_banquetProfileController.myBanquet.value.name == null) {
             return const Center(
@@ -51,44 +101,38 @@ class _BanquetDashboardState extends State<BanquetDashboard> {
                       children: [
                         Row(
                           children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            BanquetProfile()));
-                              },
-                              child: _banquetProfileController
-                                              .myBanquet.value.logo ==
-                                          null ||
-                                      _banquetProfileController
-                                              .myBanquet.value.logo ==
-                                          ''
-                                  ? CircleAvatar(
-                                      radius: 40.r,
-                                      backgroundColor: AppColors.secondaryColor,
-                                      child: Icon(
-                                        Icons.person,
-                                        size: 40.r,
-                                      ),
-                                    )
-                                  : CircleAvatar(
-                                      radius: 40.r,
+                            IconButton(
+                              onPressed: () => _openDrawer(),
+                              icon: const Icon(Icons.menu),
+                            ),
+                            _banquetProfileController.myBanquet.value.logo ==
+                                        null ||
+                                    _banquetProfileController
+                                            .myBanquet.value.logo ==
+                                        ''
+                                ? CircleAvatar(
+                                    radius: 40.r,
+                                    backgroundColor: AppColors.secondaryColor,
+                                    child: Icon(
+                                      Icons.person,
+                                      size: 40.r,
+                                    ),
+                                  )
+                                : CircleAvatar(
+                                    radius: 40.r,
+                                    backgroundColor:
+                                        AppColors.black.withOpacity(0.5),
+                                    child: CircleAvatar(
+                                      radius: 38.r,
                                       backgroundColor:
                                           AppColors.black.withOpacity(0.5),
-                                      child: CircleAvatar(
-                                        radius: 38.r,
-                                        backgroundColor:
-                                            AppColors.black.withOpacity(0.5),
-                                        backgroundImage: NetworkImage(
-                                          _banquetProfileController
-                                              .myBanquet.value.logo
-                                              .toString(),
-                                        ),
+                                      backgroundImage: NetworkImage(
+                                        _banquetProfileController
+                                            .myBanquet.value.logo
+                                            .toString(),
                                       ),
                                     ),
-                            ),
+                                  ),
                             SizedBox(
                               width: 10.w,
                             ),
