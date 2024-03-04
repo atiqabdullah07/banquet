@@ -14,7 +14,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class Login extends StatefulWidget {
-  Login({super.key, required this.role});
+  const Login({super.key, required this.role});
   final String role;
 
   @override

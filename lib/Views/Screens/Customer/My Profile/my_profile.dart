@@ -28,10 +28,10 @@ class _MyProfileState extends State<MyProfile> {
   File? pickedImage;
 
   Future<void> pickImage() async {
-    final ImagePicker _picker = ImagePicker();
+    final ImagePicker picker = ImagePicker();
     try {
       final XFile? pickedFile =
-          await _picker.pickImage(source: ImageSource.gallery);
+          await picker.pickImage(source: ImageSource.gallery);
 
       if (pickedFile != null) {
         setState(() {
@@ -61,7 +61,7 @@ class _MyProfileState extends State<MyProfile> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => EditCustomerProfile()));
+                      builder: (context) => const EditCustomerProfile()));
             },
             child: const Text(
               'Edit Profile',

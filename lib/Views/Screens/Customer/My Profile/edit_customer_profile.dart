@@ -41,10 +41,10 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
   File? pickedImage;
 
   Future<void> pickImage() async {
-    final ImagePicker _picker = ImagePicker();
+    final ImagePicker picker = ImagePicker();
     try {
       final XFile? pickedFile =
-          await _picker.pickImage(source: ImageSource.gallery);
+          await picker.pickImage(source: ImageSource.gallery);
 
       if (pickedFile != null) {
         setState(() {

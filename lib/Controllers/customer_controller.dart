@@ -18,7 +18,7 @@ class CustomerProfileController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    print("Customer init: ${customer.value.name}");
+    log("Customer init: ${customer.value.name}");
     await getCustomer();
   }
 
@@ -117,7 +117,7 @@ class CustomerProfileController extends GetxController {
 
         customer.value = customerData;
 
-        print('Name: ${customer.value.name}');
+        log('Name: ${customer.value.name}');
       } else {
         log('error');
       }

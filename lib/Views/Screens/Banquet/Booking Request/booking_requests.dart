@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
 import 'package:banquet/Controllers/banquet_controller.dart';
@@ -97,7 +99,7 @@ Widget bookingRequestCard({
                     ),
                     Text(
                       customerName,
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
                   ],
                 ),

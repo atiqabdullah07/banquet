@@ -15,7 +15,7 @@ class _CustomerHomeState extends State<CustomerHome> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    CustomerDashboard(),
+    const CustomerDashboard(),
     const Conversations(),
     const MyProfile(),
   ];

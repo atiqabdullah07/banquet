@@ -76,7 +76,7 @@ Widget hallCards({required Banquet banquet, required VoidCallback onTap}) {
                     width: 100,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        fit: BoxFit.fill,
+                        fit: BoxFit.cover,
                         image: NetworkImage(banquet.logo!),
                       ),
                       color: AppColors.backgroundColor,

@@ -35,9 +35,9 @@ class _CustomerDashboardState extends State<CustomerDashboard> {
     return SafeArea(
       child: Scaffold(
         body: RefreshIndicator(
-          onRefresh: () async {
-            await banquetController.fetchBanquets();
-          },
+          color: AppColors.primaryColor,
+          backgroundColor: Colors.white,
+          onRefresh: () async {},
           child: SingleChildScrollView(
             child: Column(
               children: [

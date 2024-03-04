@@ -1,7 +1,7 @@
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/Views/Screens/Banquet/Banquet%20Dashboard/banquet_dashboard.dart';
 import 'package:banquet/Views/Screens/Banquet/Banquet%20Profile/banquet_profile.dart';
-import 'package:banquet/Views/Screens/Banquet/Setup%20Profile/setup_profile01.dart';
+
 import 'package:banquet/Views/Screens/Chats/conversations.dart';
 
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ class _HomeState extends State<BanquetHome> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    BanquetDashboard(),
+    const BanquetDashboard(),
     const Conversations(),
     BanquetProfile(),
   ];

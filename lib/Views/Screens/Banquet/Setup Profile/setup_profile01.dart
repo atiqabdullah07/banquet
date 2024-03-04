@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:developer';
 import 'dart:io';
 
@@ -51,6 +53,21 @@ class _SetupProfile01State extends State<SetupProfile01> {
         : selectedValue = banquet.venueType.toString();
   }
 
+  Future<double> getFileSizeInMB(File file) async {
+    try {
+      // Get the file size in bytes
+      int fileSizeInBytes = await file.length();
+
+      // Convert bytes to megabytes
+      double fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+
+      return fileSizeInMB;
+    } catch (e) {
+      print('Error getting file size: $e');
+      return -1.0; // Return a default value or handle the error accordingly
+    }
+  }
+
   Future<void> pickImage() async {
     final ImagePicker picker = ImagePicker();
     try {
@@ -61,12 +78,23 @@ class _SetupProfile01State extends State<SetupProfile01> {
         setState(() {
           pickedImage = File(pickedFile.path);
         });
-        log('Image picked: ${pickedFile.path}');
+
+        if (pickedFile.path.isNotEmpty) {
+          log('Image picked: ${pickedFile.path}');
+          var fileSize = await getFileSizeInMB(File(pickedFile.path));
+
+          log('File Size: ${fileSize.toString()}');
+        } else {
+          log('Invalid file path: ${pickedFile.path}');
+          // Handle the case where the file path is empty
+          // You might want to show a message to the user or take appropriate action.
+        }
       } else {
         log('No image picked.');
       }
     } catch (e) {
       log('Error picking image: $e');
+      // Handle other exceptions that might occur during the image picking process
     }
   }
 

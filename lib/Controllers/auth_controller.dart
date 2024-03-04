@@ -8,7 +8,6 @@ import 'package:banquet/App%20Constants/helper_functions.dart';
 import 'package:banquet/Models/banquet_model.dart';
 import 'package:banquet/Models/customer_model.dart';
 import 'package:banquet/Views/Screens/Auth/login.dart';
-import 'package:banquet/Views/Screens/Banquet/banquet_home.dart';
 
 import 'package:banquet/Views/Screens/Customer/customer_home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -33,7 +32,7 @@ class AuthController extends GetxController {
   setInitialScreen(User? user) {
     if (user == null) {
       Get.offAll(
-        () => Login(
+        () => const Login(
           role: '',
         ),
       );
@@ -75,7 +74,7 @@ class AuthController extends GetxController {
   Future<void> registerUser(String username, String email, String password,
       {required String role}) async {
     try {
-      print('Role: $role');
+      log('Role: $role');
       easyLoading();
       if (username.isNotEmpty && password.isNotEmpty && email.isNotEmpty) {
         UserCredential cred = await firebaseAuth.createUserWithEmailAndPassword(
@@ -98,8 +97,8 @@ class AuthController extends GetxController {
               .set(customer.toJson());
 
           EasyLoading.dismiss();
-          Get.to(
-              Login(role: 'customer')); // navigate to login screen for customer
+          Get.to(const Login(
+              role: 'customer')); // navigate to login screen for customer
           Get.snackbar('User', 'Customer Added Successfully');
           log('Customer Added Successfully');
         } else if (role == 'banquet') {
@@ -113,8 +112,8 @@ class AuthController extends GetxController {
               .doc(cred.user!.uid)
               .set(banquet.toJson());
           EasyLoading.dismiss();
-          Get.to(
-              Login(role: 'banquet')); // navigate to login screen for customer
+          Get.to(const Login(
+              role: 'banquet')); // navigate to login screen for customer
           Get.snackbar('Banquet', 'Banquet Added Successfully');
         }
       } else {

@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
 import 'package:banquet/Controllers/banquet_controller.dart';

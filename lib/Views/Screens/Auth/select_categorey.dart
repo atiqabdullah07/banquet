@@ -76,7 +76,7 @@ class _CategoreyPageState extends State<CategoreyPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Login(
+                      builder: (context) => const Login(
                             role: 'customer',
                           )),
                 );
@@ -84,7 +84,7 @@ class _CategoreyPageState extends State<CategoreyPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Login(
+                      builder: (context) => const Login(
                             role: 'banquet',
                           )),
                 );

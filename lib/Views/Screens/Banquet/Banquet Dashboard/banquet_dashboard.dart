@@ -3,7 +3,6 @@ import 'package:banquet/App%20Constants/helper_functions.dart';
 import 'package:banquet/Controllers/banquet_controller.dart';
 import 'package:banquet/Models/banquet_model.dart';
 
-import 'package:banquet/Views/Screens/Banquet/Banquet%20Profile/banquet_profile.dart';
 import 'package:banquet/Views/Screens/Banquet/Booking%20Request/booking_requests.dart';
 import 'package:banquet/Views/Screens/Banquet/Events/banquet_events.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
@@ -13,7 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class BanquetDashboard extends StatefulWidget {
-  BanquetDashboard({super.key});
+  const BanquetDashboard({super.key});
 
   @override
   State<BanquetDashboard> createState() => _BanquetDashboardState();
@@ -90,109 +89,119 @@ class _BanquetDashboardState extends State<BanquetDashboard> {
               child: CircularProgressIndicator(),
             );
           } else {
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            IconButton(
-                              onPressed: () => _openDrawer(),
-                              icon: const Icon(Icons.menu),
-                            ),
-                            _banquetProfileController.myBanquet.value.logo ==
-                                        null ||
-                                    _banquetProfileController
-                                            .myBanquet.value.logo ==
-                                        ''
-                                ? CircleAvatar(
-                                    radius: 40.r,
-                                    backgroundColor: AppColors.secondaryColor,
-                                    child: Icon(
-                                      Icons.person,
-                                      size: 40.r,
-                                    ),
-                                  )
-                                : CircleAvatar(
-                                    radius: 40.r,
-                                    backgroundColor:
-                                        AppColors.black.withOpacity(0.5),
-                                    child: CircleAvatar(
-                                      radius: 38.r,
+            return RefreshIndicator(
+              color: AppColors.primaryColor,
+              backgroundColor: Colors.white,
+              onRefresh: () async {
+                await _banquetController.fetchBookings();
+              },
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: () => _openDrawer(),
+                                icon: const Icon(Icons.menu),
+                              ),
+                              _banquetProfileController.myBanquet.value.logo ==
+                                          null ||
+                                      _banquetProfileController
+                                              .myBanquet.value.logo ==
+                                          ''
+                                  ? CircleAvatar(
+                                      radius: 40.r,
+                                      backgroundColor: AppColors.secondaryColor,
+                                      child: Icon(
+                                        Icons.person,
+                                        size: 40.r,
+                                      ),
+                                    )
+                                  : CircleAvatar(
+                                      radius: 40.r,
                                       backgroundColor:
                                           AppColors.black.withOpacity(0.5),
-                                      backgroundImage: NetworkImage(
-                                        _banquetProfileController
-                                            .myBanquet.value.logo
-                                            .toString(),
+                                      child: CircleAvatar(
+                                        radius: 38.r,
+                                        backgroundColor:
+                                            AppColors.black.withOpacity(0.5),
+                                        backgroundImage: NetworkImage(
+                                          _banquetProfileController
+                                              .myBanquet.value.logo
+                                              .toString(),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                            SizedBox(
-                              width: 10.w,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Hello!",
-                                  style: TextStyle(
-                                    color: AppColors.black.withOpacity(0.5),
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                Text(
-                                  _banquetProfileController.myBanquet.value.name
-                                      .toString(),
-                                  style: const TextStyle(
-                                      color: AppColors.black,
+                              SizedBox(
+                                width: 10.w,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Hello!",
+                                    style: TextStyle(
+                                      color: AppColors.black.withOpacity(0.5),
                                       fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        IconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => BookingRequests()));
-                            },
-                            icon: const Icon(
-                              Icons.notifications_outlined,
-                              size: 30,
-                            ))
-                      ],
-                    ),
-                    height(20),
-                    titleText(title: 'My Bookings'),
-                    height(10),
-                    _banquetController.bookings.isEmpty
-                        ? const Center(
-                            child: Text('No Booking'),
-                          )
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: List.generate(
-                                _banquetController.bookings.length, (index) {
-                              var booking = _banquetController.bookings[index];
-                              return bookingCard(
-                                  bookingPrice: booking.bookingPrice,
-                                  menu: booking.menu,
-                                  guests: booking.guests,
-                                  timeSlot: booking.timeSlot,
-                                  date: booking.date);
-                            }),
+                                    ),
+                                  ),
+                                  Text(
+                                    _banquetProfileController
+                                        .myBanquet.value.name
+                                        .toString(),
+                                    style: const TextStyle(
+                                        color: AppColors.black,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                  ],
+                          IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            BookingRequests()));
+                              },
+                              icon: const Icon(
+                                Icons.notifications_outlined,
+                                size: 30,
+                              ))
+                        ],
+                      ),
+                      height(20),
+                      titleText(title: 'My Bookings'),
+                      height(10),
+                      _banquetController.bookings.isEmpty
+                          ? const Center(
+                              child: Text('No Booking'),
+                            )
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: List.generate(
+                                  _banquetController.bookings.length, (index) {
+                                var booking =
+                                    _banquetController.bookings[index];
+                                return bookingCard(
+                                    bookingPrice: booking.bookingPrice,
+                                    menu: booking.menu,
+                                    guests: booking.guests,
+                                    timeSlot: booking.timeSlot,
+                                    date: booking.date);
+                              }),
+                            ),
+                    ],
+                  ),
                 ),
               ),
             );

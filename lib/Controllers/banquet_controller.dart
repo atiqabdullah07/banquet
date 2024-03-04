@@ -46,9 +46,9 @@ class BanquetController extends GetxController {
             .toList(),
       );
 
-      print('Bookings :$bookings');
+      log('Bookings :$bookings');
     } catch (e) {
-      print("Error fetching and appending banquets: $e");
+      log("Error fetching and appending banquets: $e");
     }
   }
 
@@ -71,7 +71,7 @@ class BanquetController extends GetxController {
       );
       isRequestFetched.value = true;
     } catch (e) {
-      print("Error fetching and appending banquets: $e");
+      log("Error fetching and appending banquets: $e");
     }
   }
 
@@ -94,36 +94,33 @@ class BanquetController extends GetxController {
       log('Banquets');
       log(banquets.toString());
     } catch (e) {
-      print("Error fetching and appending banquets: $e");
+      log("Error fetching and appending banquets: $e");
     }
   }
 
   Future<String> uploadProfilePic(File image) async {
-    late String imageURL = '';
-
     try {
       final imgId = DateTime.now().millisecondsSinceEpoch.toString();
       final storageRef = FirebaseStorage.instance.ref('Profile Pics');
       final imgRef = storageRef.child('path_$imgId');
 
       // Upload the new file
-      await imgRef.putFile(image).catchError((error) {
-        log("Error uploading image: $error");
-        return null;
-      });
+      await imgRef.putFile(image);
 
-      try {
-        // Get the download URL for the new file
-        var url = await imgRef.getDownloadURL();
-        imageURL = url;
-      } catch (error) {
-        log("Error getting download URL: $error");
+      // Get the download URL for the new file
+      final url = await imgRef.getDownloadURL();
+
+      return url;
+    } catch (e) {
+      if (e is FirebaseException) {
+        log('Firebase Storage Error: ${e.code}');
+        log('Firebase Storage Error Message: ${e.message}');
+      } else {
+        log('Error uploading or getting download URL: $e');
+        // Handle other types of errors if needed.
       }
 
-      return imageURL;
-    } catch (e) {
-      log('Catch Block of uploadFile: ${e.toString()}');
-      return imageURL; // Return a default value on failure
+      return ''; // Return a default value on failure
     }
   }
 
@@ -143,11 +140,11 @@ class BanquetController extends GetxController {
 
       Get.snackbar('Success', 'Menu Added Successfully');
 
-      print('Menu added successfully');
+      log('Menu added successfully');
     } catch (e) {
       EasyLoading.dismiss();
-      print('Error adding menu: $e');
-      throw e;
+      log('Error adding menu: $e');
+      rethrow;
     }
   }
 
@@ -203,11 +200,11 @@ class BanquetController extends GetxController {
       );
       EasyLoading.dismiss();
 
-      print('Banquet information updated successfully');
+      log('Banquet information updated successfully');
     } catch (e) {
       EasyLoading.dismiss();
-      print('Error updating banquet information: $e');
-      throw e;
+      log('Error updating banquet information: $e');
+      rethrow;
     }
   }
 
@@ -239,12 +236,12 @@ class BanquetController extends GetxController {
         EasyLoading.dismiss();
         await fetchBookings();
       } else {
-        print('Booking request not found');
+        log('Booking request not found');
         EasyLoading.dismiss();
       }
     } catch (e) {
-      print('Error moving booking: $e');
-      throw e;
+      log('Error moving booking: $e');
+      rethrow;
     }
   }
 }
@@ -272,8 +269,8 @@ class BanquetProfileController extends GetxController {
         var banquet = Banquet.fromJson(userDoc.data() as Map<String, dynamic>);
 
         myBanquet.value = banquet;
-        print('myBanquet');
-        print(myBanquet.value.bookingRequests);
+        log('myBanquet');
+        log(myBanquet.value.bookingRequests.toString());
       } else {
         log('error');
       }
