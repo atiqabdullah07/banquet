@@ -19,6 +19,8 @@ class BanquetController extends GetxController {
   RxList<Banquet> banquets = RxList<Banquet>();
   RxList<Reservation> bookingRequests = RxList<Reservation>();
   RxList<Reservation> bookings = RxList<Reservation>();
+  RxInt selectedMenu = 20000.obs;
+  RxBool isRequestFetched = false.obs;
   @override
   void onInit() async {
     super.onInit();
@@ -58,7 +60,7 @@ class BanquetController extends GetxController {
           .doc(banquetId)
           .collection('bookingRequests')
           .get();
-
+      isRequestFetched.value = false;
       bookingRequests.clear();
       bookingRequests.addAll(
         querySnapshot.docs
@@ -67,8 +69,7 @@ class BanquetController extends GetxController {
             )
             .toList(),
       );
-      print('Booking Requests');
-      print(bookingRequests);
+      isRequestFetched.value = true;
     } catch (e) {
       print("Error fetching and appending banquets: $e");
     }
@@ -80,6 +81,8 @@ class BanquetController extends GetxController {
           await FirebaseFirestore.instance.collection('banquet').get();
 
       banquets.clear();
+      log('Banquets');
+      log(querySnapshot.toString());
       banquets.addAll(
         querySnapshot.docs
             .map(
@@ -87,6 +90,9 @@ class BanquetController extends GetxController {
             )
             .toList(),
       );
+
+      log('Banquets');
+      log(banquets.toString());
     } catch (e) {
       print("Error fetching and appending banquets: $e");
     }
@@ -209,6 +215,7 @@ class BanquetController extends GetxController {
     try {
       CollectionReference banquetCollection =
           FirebaseFirestore.instance.collection('banquet');
+      easyLoading();
 
       var banquetId = FirebaseAuth.instance.currentUser!.uid;
 
@@ -229,8 +236,11 @@ class BanquetController extends GetxController {
 
         // Remove the booking request from the 'bookingRequests' subcollection
         await bookingRequestDoc.reference.delete();
+        EasyLoading.dismiss();
+        await fetchBookings();
       } else {
         print('Booking request not found');
+        EasyLoading.dismiss();
       }
     } catch (e) {
       print('Error moving booking: $e');

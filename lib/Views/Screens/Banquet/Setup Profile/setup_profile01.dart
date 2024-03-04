@@ -19,17 +19,37 @@ class SetupProfile01 extends StatefulWidget {
 }
 
 class _SetupProfile01State extends State<SetupProfile01> {
-  final TextEditingController _parkingController = TextEditingController();
-  final TextEditingController _guestsController = TextEditingController();
-  final TextEditingController _bookingPriceController = TextEditingController();
-  final TextEditingController _facilitiesController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
+  late TextEditingController _parkingController;
+  late TextEditingController _guestsController;
+  late TextEditingController _bookingPriceController;
+  late TextEditingController _facilitiesController;
+  late TextEditingController _locationController;
+  late TextEditingController _descriptionController;
 
   final BanquetController banquetController = Get.put(BanquetController());
+  final BanquetProfileController _banquetProfileController =
+      Get.put(BanquetProfileController());
   final _formKey = GlobalKey<FormState>();
   File? pickedImage;
-  String selectedValue = 'Marquee/Banquet';
+  late String selectedValue;
+
+  @override
+  void initState() {
+    super.initState();
+
+    var banquet = _banquetProfileController.myBanquet.value;
+
+    _parkingController = TextEditingController(text: banquet.parkingCapacity);
+    _guestsController = TextEditingController(text: banquet.guestsCapacity);
+    _bookingPriceController = TextEditingController(text: banquet.bookingPrice);
+    _facilitiesController = TextEditingController(text: banquet.facilities);
+    _locationController = TextEditingController(text: banquet.location);
+    _descriptionController = TextEditingController(text: banquet.description);
+
+    banquet.venueType == null
+        ? selectedValue = 'Marquee/Banquet'
+        : selectedValue = banquet.venueType.toString();
+  }
 
   Future<void> pickImage() async {
     final ImagePicker picker = ImagePicker();
@@ -57,7 +77,8 @@ class _SetupProfile01State extends State<SetupProfile01> {
         title: const Text('Setup Banquet Profile'),
       ),
       body: SingleChildScrollView(
-        child: Padding(
+          child: Obx(
+        () => Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,8 +102,10 @@ class _SetupProfile01State extends State<SetupProfile01> {
                             : CircleAvatar(
                                 radius: 48.r,
                                 backgroundColor: Colors.white,
-                                backgroundImage: const NetworkImage(
-                                    "https://images-platform.99static.com/8o4gbZyhGRrmCBJKnX4GlKZ-9EA=/265x41:1552x1328/500x500/top/smart/99designs-contests-attachments/91/91413/attachment_91413639"),
+                                backgroundImage: NetworkImage(
+                                    _banquetProfileController
+                                        .myBanquet.value.logo
+                                        .toString()),
                               ),
                       ),
                     ),
@@ -254,7 +277,7 @@ class _SetupProfile01State extends State<SetupProfile01> {
                     height(00),
                     Center(
                       child: appButton(
-                        title: 'Continue',
+                        title: 'Save',
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
                             banquetController.updateBanquetInfoForCurrentUser(
@@ -281,7 +304,7 @@ class _SetupProfile01State extends State<SetupProfile01> {
             ],
           ),
         ),
-      ),
+      )),
     );
   }
 

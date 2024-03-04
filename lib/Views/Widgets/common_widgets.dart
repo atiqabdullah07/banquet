@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/Models/banquet_model.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +48,6 @@ Widget hallCards({required Banquet banquet, required VoidCallback onTap}) {
       onTap: onTap,
       child: Container(
         height: 120,
-        width: 400,
         decoration: BoxDecoration(
           color: AppColors.primaryColor,
           borderRadius: BorderRadius.circular(15),
@@ -54,18 +55,34 @@ Widget hallCards({required Banquet banquet, required VoidCallback onTap}) {
         child: Row(children: [
           Padding(
             padding: const EdgeInsets.all(10),
-            child: Container(
-              height: 100.h,
-              width: 100.w,
-              decoration: BoxDecoration(
-                image: const DecorationImage(
-                    fit: BoxFit.fill,
-                    image: NetworkImage(
-                        'https://i.pinimg.com/originals/04/35/6e/04356ed3ba8787b478e50804d81e1bf1.jpg')),
-                color: AppColors.backgroundColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
+            child: banquet.logo == '' || banquet.logo == null
+                ? Container(
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                      color: AppColors.secondaryColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'Banquet',
+                        style: TextStyle(
+                            color: AppColors.primaryColor, fontSize: 18),
+                      ),
+                    ),
+                  )
+                : Container(
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: NetworkImage(banquet.logo!),
+                      ),
+                      color: AppColors.backgroundColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
           ),
           SizedBox(
             width: 5.w,
@@ -91,26 +108,13 @@ Widget hallCards({required Banquet banquet, required VoidCallback onTap}) {
                     size: 24.r,
                     color: Colors.yellow,
                   ),
-                  Icon(
-                    Icons.star,
-                    size: 24.r,
-                    color: Colors.yellow,
+                  const SizedBox(
+                    width: 5,
                   ),
-                  Icon(
-                    Icons.star,
-                    size: 24.r,
-                    color: Colors.yellow,
-                  ),
-                  Icon(
-                    Icons.star,
-                    size: 24.r,
-                    color: Colors.yellow,
-                  ),
-                  Icon(
-                    Icons.star,
-                    size: 24.r,
-                    color: Colors.yellow,
-                  ),
+                  const Text(
+                    '4.0',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  )
                 ],
               ),
             ],
@@ -130,7 +134,6 @@ BoxShadow softShadow() {
   );
 }
 
-// ignore: must_be_immutable
 class CustomButton extends StatelessWidget {
   CustomButton({
     super.key,
@@ -217,6 +220,86 @@ class AppTextField extends StatelessWidget {
             borderRadius: BorderRadius.circular(8.0),
           ),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        ),
+      ),
+    );
+  }
+}
+
+class CustomDialogWidget extends StatelessWidget {
+  CustomDialogWidget(
+      {super.key,
+      this.isFailure = false,
+      required this.title,
+      required this.message,
+      this.buttonText = 'OK'});
+
+  bool isFailure;
+  final String title;
+  final String message;
+  String buttonText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Container(
+        width: 250.w,
+        decoration: BoxDecoration(
+          color: AppColors.backgroundColor,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              height: 150,
+              decoration: BoxDecoration(
+                  color: isFailure == true ? Colors.red : Colors.green,
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20))),
+              child: const Center(
+                child: Icon(
+                  Icons.check_circle_outline,
+                  size: 70,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+              child: Column(
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                  Text(
+                    message,
+                    style: TextStyle(color: Colors.grey.withOpacity(0.8)),
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: const Size(180, 40),
+                        backgroundColor:
+                            isFailure == true ? Colors.red : Colors.green,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                      ),
+                      child: Text(
+                        buttonText,
+                        style: const TextStyle(color: Colors.white),
+                      ))
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );

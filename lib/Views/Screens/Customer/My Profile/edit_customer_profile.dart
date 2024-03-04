@@ -26,6 +26,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
 
   late TextEditingController nameController;
   late TextEditingController emailController;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -63,7 +64,6 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
     return Scaffold(
         backgroundColor: AppColors.backgroundColor,
         appBar: AppBar(
-          automaticallyImplyLeading: false,
           backgroundColor: AppColors.backgroundColor,
           title: const Text('Edit Profile'),
           centerTitle: true,
@@ -123,6 +123,7 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                     ),
                     height(20),
                     Form(
+                      key: _formKey,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -166,19 +167,21 @@ class _EditCustomerProfileState extends State<EditCustomerProfile> {
                                 appButton(
                                   title: 'Save Changes',
                                   onTap: () async {
-                                    await _customerProfileController
-                                        .updateCustomerProfile(
-                                            Customer(
-                                                name: nameController.text,
-                                                profilePhoto:
-                                                    _customerProfileController
-                                                        .customer
-                                                        .value
-                                                        .profilePhoto),
-                                            pickedImage);
+                                    if (_formKey.currentState!.validate()) {
+                                      await _customerProfileController
+                                          .updateCustomerProfile(
+                                              Customer(
+                                                  name: nameController.text,
+                                                  profilePhoto:
+                                                      _customerProfileController
+                                                          .customer
+                                                          .value
+                                                          .profilePhoto),
+                                              pickedImage);
 
-                                    await _customerProfileController
-                                        .getCustomer();
+                                      await _customerProfileController
+                                          .getCustomer();
+                                    }
                                   },
                                 ),
                               ],

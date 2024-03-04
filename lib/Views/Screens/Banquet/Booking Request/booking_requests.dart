@@ -16,30 +16,43 @@ class BookingRequests extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Booking Requests'),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: ListView.builder(
-            itemCount: _banquetController.bookingRequests.length,
-            itemBuilder: (context, index) {
-              var request = _banquetController.bookingRequests[index];
-              return bookingRequestCard(
-                  bookingPrice: request.bookingPrice,
-                  menu: request.menu,
-                  guests: request.guests,
-                  timeSlot: request.timeSlot,
-                  date: request.date,
-                  customerName: request.customer.name!,
-                  onAccept: () {
-                    print(request.uid);
-                    _banquetController.acceptBooking(request.uid);
-                  },
-                  onDecline: () {});
-            },
-          ),
-        ));
+      appBar: AppBar(
+        title: const Text('Booking Requests'),
+      ),
+      body: Obx(() {
+        if (_banquetController.isRequestFetched.value == false) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (_banquetController.bookingRequests.isEmpty) {
+          return const Center(
+            child: Text('No Booking Requests'),
+          );
+        } else {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: ListView.builder(
+              itemCount: _banquetController.bookingRequests.length,
+              itemBuilder: (context, index) {
+                var request = _banquetController.bookingRequests[index];
+                return bookingRequestCard(
+                    bookingPrice: request.bookingPrice,
+                    menu: request.menu,
+                    guests: request.guests,
+                    timeSlot: request.timeSlot,
+                    date: request.date,
+                    customerName: request.customer.name!,
+                    onAccept: () async {
+                      await _banquetController.acceptBooking(request.uid);
+                      await _banquetController.fetchBookingRequests();
+                    },
+                    onDecline: () {});
+              },
+            ),
+          );
+        }
+      }),
+    );
   }
 }
 

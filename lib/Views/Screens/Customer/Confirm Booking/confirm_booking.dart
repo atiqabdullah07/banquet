@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:banquet/App%20Constants/constants.dart';
+import 'package:banquet/App%20Constants/helper_functions.dart';
 import 'package:banquet/Controllers/banquet_controller.dart';
 import 'package:banquet/Models/banquet_model.dart';
 import 'package:banquet/Models/customer_model.dart';
@@ -9,10 +10,9 @@ import 'package:banquet/Views/Screens/Customer/Confirm%20Booking/confirm_booking
 import 'package:banquet/Views/Screens/Customer/Hall%20Details/hall_details_widgets.dart';
 
 import 'package:banquet/Views/Widgets/common_widgets.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -73,11 +73,14 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: SfDateRangePicker(
+                  enablePastDates: false,
                   todayHighlightColor: AppColors.primaryColor,
                   selectionColor: AppColors.primaryColor,
                   onSelectionChanged:
                       (DateRangePickerSelectionChangedArgs args) {
-                    _selectedDate = args.value.toString();
+                    _selectedDate = dateTypeConverter(
+                      date: args.value.toString(),
+                    );
                   },
                 ),
               ),
@@ -172,11 +175,33 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                   ? const Center(
                       child: Text('No Menu by the Banquet'),
                     )
-                  : Column(
-                      children: List.generate(
-                        widget.banquet.menu!.length,
-                        (index) => Menu(
-                          menu: widget.banquet.menu![index],
+                  : Obx(
+                      () => Column(
+                        children: List.generate(
+                          widget.banquet.menu!.length,
+                          (index) => Row(
+                            children: [
+                              Checkbox(
+                                  activeColor: AppColors.primaryColor,
+                                  value:
+                                      _banquetController.selectedMenu.value ==
+                                              index
+                                          ? true
+                                          : false,
+                                  onChanged: (val) {
+                                    _banquetController.selectedMenu.value =
+                                        index;
+                                  }),
+                              SizedBox(
+                                width: 5.w,
+                              ),
+                              Expanded(
+                                child: Menu(
+                                  menu: widget.banquet.menu![index],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -246,10 +271,20 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                 child: appButton(
                   title: 'Send Request',
                   onTap: () {
+                    int selectedMenuIndex =
+                        _banquetController.selectedMenu.value;
+                    var slectedMenu =
+                        widget.banquet.menu![selectedMenuIndex].name.toString();
+
+                    var price = int.parse(widget.banquet.bookingPrice!) +
+                        (int.parse(
+                                widget.banquet.menu![selectedMenuIndex].price) *
+                            _guests);
+
                     _banquetController.sendBookingRequest(
                         Reservation(
-                          bookingPrice: 'price',
-                          menu: 'menu',
+                          bookingPrice: price.toString(),
+                          menu: slectedMenu,
                           guests: _guests.toString(),
                           timeSlot: _selectedTime,
                           date: _selectedDate,
