@@ -138,11 +138,11 @@ class _CustomerDashboardState extends State<CustomerDashboard> {
                               color: AppColors.primaryColor,
                               borderRadius: BorderRadius.circular(200),
                             ),
-                            child: Center(
+                            child: const Center(
                               child: Icon(
                                 Icons.search_rounded,
                                 color: Colors.white,
-                                size: 22.r,
+                                size: 22,
                               ),
                             ),
                           ),
@@ -271,8 +271,8 @@ class _CustomerDashboardState extends State<CustomerDashboard> {
           GestureDetector(
             onTap: onTap,
             child: Container(
-              height: 75.h,
-              width: 75.w,
+              height: 75,
+              width: 75,
               decoration: BoxDecoration(
                 image: DecorationImage(image: AssetImage(icon)),
                 color: AppColors.secondaryColor,

@@ -258,9 +258,11 @@ class CustomDialogWidget extends StatelessWidget {
                   borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20))),
-              child: const Center(
+              child: Center(
                 child: Icon(
-                  Icons.check_circle_outline,
+                  isFailure == true
+                      ? Icons.highlight_off_rounded
+                      : Icons.check_circle_outline,
                   size: 70,
                   color: Colors.white,
                 ),
