@@ -7,7 +7,7 @@ class BanquetEvents extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('BanquetEvents'),
+        title: const Text('Banquet Events'),
       ),
     );
   }
