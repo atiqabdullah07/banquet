@@ -4,11 +4,14 @@ import 'dart:io';
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
 import 'package:banquet/Models/banquet_model.dart';
+import 'package:banquet/Models/event_model.dart';
 import 'package:banquet/Models/menu_model.dart';
 import 'package:banquet/Models/reservation_model.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:get/get.dart';
@@ -21,11 +24,41 @@ class BanquetController extends GetxController {
   RxList<Reservation> bookings = RxList<Reservation>();
   RxInt selectedMenu = 20000.obs;
   RxBool isRequestFetched = false.obs;
+  RxString eventDate = dateTypeConverter(date: DateTime.now().toString()).obs;
+
   @override
   void onInit() async {
     super.onInit();
     await fetchBookings();
     await fetchBookingRequests();
+  }
+
+  Future<bool> addEvent(
+    EventModel event,
+  ) async {
+    bool isAdded = false;
+    try {
+      easyLoading();
+      String currentUserId = firebaseAuth.currentUser!.uid;
+      await firestore
+          .collection('banquet')
+          .doc(currentUserId)
+          .collection('events')
+          .add(
+            event.toJson(),
+          );
+
+      EasyLoading.dismiss();
+
+      isAdded = true;
+
+      log('Event added successfully');
+    } catch (e) {
+      EasyLoading.dismiss();
+      log('Error adding event: $e');
+      rethrow;
+    }
+    return isAdded;
   }
 
   Future<void> fetchBookings() async {
