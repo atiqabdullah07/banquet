@@ -5,6 +5,7 @@ import 'package:banquet/Models/banquet_model.dart';
 
 import 'package:banquet/Views/Screens/Banquet/Booking%20Request/booking_requests.dart';
 import 'package:banquet/Views/Screens/Banquet/Events/banquet_events.dart';
+import 'package:banquet/Views/Screens/Banquet/Events/food_event.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
 
 import 'package:flutter/material.dart';
@@ -62,15 +63,18 @@ class _BanquetDashboardState extends State<BanquetDashboard> {
               ListTile(
                 title: const Text('Event Posts'),
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const BanquetEvents()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => BanquetEvents()));
                 },
               ),
               ListTile(
                 title: const Text('Food Posts'),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => BanquetFoodEvents()));
+                },
               ),
               ListTile(
                 title: const Text('Advertisements'),

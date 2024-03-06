@@ -1,33 +1,29 @@
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/Controllers/banquet_controller.dart';
-import 'package:banquet/Models/event_model.dart';
-import 'package:banquet/Views/Screens/Banquet/Events/add_event.dart';
+import 'package:banquet/Models/food_model.dart';
+import 'package:banquet/Views/Screens/Banquet/Events/add_food.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
-
 import 'package:flutter/material.dart';
-
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class BanquetEvents extends StatelessWidget {
-  BanquetEvents({super.key});
+class BanquetFoodEvents extends StatelessWidget {
+  BanquetFoodEvents({super.key});
 
-  final BanquetController _banquetController = Get.put(
-    BanquetController(),
-  );
+  final BanquetController _banquetController = Get.put(BanquetController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Banquet Events'),
+        title: const Text('Food Events'),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.primaryColor,
         onPressed: () {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const AddEvent()));
+              MaterialPageRoute(builder: (context) => const AddFood()));
         },
+        backgroundColor: AppColors.primaryColor,
         child: const Center(
           child: Icon(
             Icons.add,
@@ -37,16 +33,15 @@ class BanquetEvents extends StatelessWidget {
       ),
       body: Obx(() {
         return ListView.builder(
-          itemCount: _banquetController.myEvents.length,
+          itemCount: _banquetController.myFoods.length,
           itemBuilder: (context, index) {
-            var event = _banquetController.myEvents[index];
-            return BanquetEventsCard(
-              event: EventModel(
-                  banquetname: event.banquetname,
-                  title: event.title,
-                  content: event.content,
-                  date: event.date),
-            );
+            var food = _banquetController.myFoods[index];
+            return BanquetFoodsCard(
+                food: FoodModel(
+                    banquetname: food.banquetname,
+                    title: food.title,
+                    content: food.content,
+                    date: food.date));
           },
         );
       }),
@@ -54,13 +49,13 @@ class BanquetEvents extends StatelessWidget {
   }
 }
 
-class BanquetEventsCard extends StatelessWidget {
-  const BanquetEventsCard({
+class BanquetFoodsCard extends StatelessWidget {
+  const BanquetFoodsCard({
     super.key,
-    required this.event,
+    required this.food,
   });
 
-  final EventModel event;
+  final FoodModel food;
 
   @override
   Widget build(BuildContext context) {
@@ -78,41 +73,10 @@ class BanquetEventsCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-         
-         
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: event.image == null || event.image == ''
-                  ? Container(
-                      width: 100.w,
-                      decoration: BoxDecoration(
-                        color: AppColors.secondaryColor,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'Event',
-                          style: TextStyle(color: AppColors.primaryColor),
-                        ),
-                      ),
-                    )
-                  : Container(
-                      width: 100.w,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.fill,
-                          image: NetworkImage(event.image!),
-                        ),
-                        color: AppColors.backgroundColor,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-            ),
-         
-         
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(right: 20, bottom: 15, top: 15),
+                padding: const EdgeInsets.only(
+                    right: 20, left: 20, bottom: 15, top: 15),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,7 +95,7 @@ class BanquetEventsCard extends StatelessWidget {
                                   children: [
                                     Expanded(
                                       child: Text(
-                                        event.title,
+                                        food.title,
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
                                         style: const TextStyle(
@@ -147,7 +111,7 @@ class BanquetEventsCard extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          event.content,
+                          food.content,
                           style: TextStyle(
                               color: AppColors.black.withOpacity(0.7)),
                           overflow: TextOverflow.ellipsis,
@@ -159,7 +123,7 @@ class BanquetEventsCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          event.date,
+                          food.date,
                           style: const TextStyle(fontSize: 14),
                         ),
                         Row(

@@ -16,6 +16,7 @@ class Banquet {
   List<Reservation>? bookings;
   List<Reservation>? bookingRequests;
   List<PackageMenu>? menu; // List of reservations, now non-required
+  List<String>? wishlist; // List of strings for wishlist
 
   Banquet({
     this.name,
@@ -30,6 +31,7 @@ class Banquet {
     this.description = '',
     this.location,
     this.menu = const [], // Initialize with an empty list
+    this.wishlist = const [], // Initialize wishlist with an empty list
   });
 
   factory Banquet.fromJson(Map<String, dynamic> json) {
@@ -51,6 +53,11 @@ class Banquet {
                   PackageMenu.fromJson(menuJson as Map<String, dynamic>))
               .toList() ??
           [], // Convert JSON array to List of Reservation objects
+
+      wishlist: (json['wishlist'] as List<dynamic>?)
+              ?.map((wish) => wish as String)
+              .toList() ??
+          [], // Convert JSON array to List of Strings
     );
   }
 
@@ -68,6 +75,7 @@ class Banquet {
       'description': description,
       'location': location,
       'menu': menu?.map((menuItem) => menuItem.toJson()).toList(),
+      'wishlist': wishlist,
     };
   }
 }

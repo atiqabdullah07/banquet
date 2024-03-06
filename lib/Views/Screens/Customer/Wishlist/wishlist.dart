@@ -1,9 +1,14 @@
 import 'package:banquet/App%20Constants/constants.dart';
+import 'package:banquet/Controllers/customer_controller.dart';
+import 'package:banquet/Models/banquet_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class Wishlist extends StatelessWidget {
-  const Wishlist({super.key});
+  Wishlist({super.key});
+
+  final CustomerController _customerController = Get.put(CustomerController());
 
   @override
   Widget build(BuildContext context) {
@@ -11,17 +16,20 @@ class Wishlist extends StatelessWidget {
       appBar: AppBar(
         title: const Text('My Wishlist'),
       ),
-      body: ListView.builder(
-        itemCount: 2,
-        itemBuilder: (context, index) {
-          return whishlistCard();
-        },
-      ),
+      body: Obx(() {
+        return ListView.builder(
+          itemCount: _customerController.myWishlist.length,
+          itemBuilder: (context, index) {
+            var banquet = _customerController.myWishlist[index];
+            return whishlistCard(banquet: banquet);
+          },
+        );
+      }),
     );
   }
 }
 
-Widget whishlistCard() {
+Widget whishlistCard({required Banquet banquet}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
     child: Container(
@@ -36,18 +44,32 @@ Widget whishlistCard() {
           children: [
             Padding(
               padding: const EdgeInsets.all(10),
-              child: Container(
-                height: 100,
-                width: 100,
-                decoration: BoxDecoration(
-                  image: const DecorationImage(
-                      fit: BoxFit.fill,
-                      image: NetworkImage(
-                          'https://i.pinimg.com/originals/85/7a/bc/857abcdd95af8530c9d022f5cb420932.png')),
-                  color: AppColors.backgroundColor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
+              child: banquet.logo == null || banquet.logo == ''
+                  ? Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'Banquet',
+                          style: TextStyle(color: AppColors.primaryColor),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      height: 100,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: NetworkImage(banquet.logo.toString())),
+                        color: AppColors.secondaryColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
             ),
             SizedBox(
               width: 5.w,
@@ -56,9 +78,9 @@ Widget whishlistCard() {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Mashallah Halls',
-                  style: TextStyle(
+                Text(
+                  banquet.name.toString(),
+                  style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
                       color: Colors.white),

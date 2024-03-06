@@ -3,6 +3,7 @@
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/Controllers/banquet_controller.dart';
 import 'package:banquet/Controllers/customer_controller.dart';
+import 'package:banquet/Views/Screens/Customer/Events/customer_food_events.dart';
 
 import 'package:banquet/Views/Screens/Customer/Events/events.dart';
 
@@ -20,14 +21,15 @@ class CustomerDashboard extends StatefulWidget {
 }
 
 class _CustomerDashboardState extends State<CustomerDashboard> {
-  final BanquetController banquetController = Get.put(BanquetController());
+  final CustomerController _customerController = Get.put(CustomerController());
+
   final CustomerProfileController _customerProfileController =
       Get.put(CustomerProfileController());
 
   @override
   void initState() {
     super.initState();
-    banquetController.fetchBanquets();
+    _customerController.fetchBanquets();
   }
 
   @override
@@ -200,12 +202,17 @@ class _CustomerDashboardState extends State<CustomerDashboard> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const Events()));
+                                  builder: (context) => Events()));
                         }),
                     servicesButton(
                         icon: 'assets/icons/Free Food.png',
                         title: 'Foods',
-                        onTap: () {}),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CustomerFoodEvents()));
+                        }),
                     servicesButton(
                         icon: 'assets/icons/Recomendations.png',
                         title: 'Recomendations',
@@ -233,18 +240,19 @@ class _CustomerDashboardState extends State<CustomerDashboard> {
                   height: 5.h,
                 ),
                 Obx(() => Column(
-                      children: List.generate(banquetController.banquets.length,
-                          (index) {
+                      children: List.generate(
+                          _customerController.banquets.length, (index) {
                         return hallCards(
-                          banquet: banquetController.banquets[index],
+                          banquet: _customerController.banquets[index],
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => HallDetails(
-                                  banquet: banquetController.banquets[index],
+                                  banquet: _customerController.banquets[index],
                                   customer:
                                       _customerProfileController.customer.value,
+                                  index: index,
                                 ),
                               ),
                             );

@@ -5,6 +5,7 @@ import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
 import 'package:banquet/Models/banquet_model.dart';
 import 'package:banquet/Models/event_model.dart';
+import 'package:banquet/Models/food_model.dart';
 import 'package:banquet/Models/menu_model.dart';
 import 'package:banquet/Models/reservation_model.dart';
 
@@ -19,18 +20,97 @@ import 'package:get/get.dart';
 class BanquetController extends GetxController {
   final BanquetProfileController _banquetProfileController =
       Get.put(BanquetProfileController());
-  RxList<Banquet> banquets = RxList<Banquet>();
+
+  RxList<EventModel> myEvents = RxList<EventModel>();
+  RxList<FoodModel> myFoods = RxList<FoodModel>();
   RxList<Reservation> bookingRequests = RxList<Reservation>();
   RxList<Reservation> bookings = RxList<Reservation>();
   RxInt selectedMenu = 20000.obs;
   RxBool isRequestFetched = false.obs;
   RxString eventDate = dateTypeConverter(date: DateTime.now().toString()).obs;
+  RxString foodDate = dateTypeConverter(date: DateTime.now().toString()).obs;
 
   @override
   void onInit() async {
     super.onInit();
     await fetchBookings();
     await fetchBookingRequests();
+    await fetchEvents();
+    await fetchFoods();
+  }
+
+  Future<bool> addFood(
+    FoodModel food,
+  ) async {
+    bool isAdded = false;
+    try {
+      easyLoading();
+      String currentUserId = firebaseAuth.currentUser!.uid;
+      await firestore
+          .collection('banquet')
+          .doc(currentUserId)
+          .collection('foods')
+          .add(
+            food.toJson(),
+          );
+
+      EasyLoading.dismiss();
+
+      isAdded = true;
+
+      fetchFoods();
+
+      log('Food added successfully');
+    } catch (e) {
+      EasyLoading.dismiss();
+      log('Error adding Food: $e');
+      rethrow;
+    }
+    return isAdded;
+  }
+
+  Future<void> fetchFoods() async {
+    try {
+      var banquetId = FirebaseAuth.instance.currentUser!.uid;
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('banquet')
+          .doc(banquetId)
+          .collection('foods')
+          .get();
+
+      myFoods.clear();
+      myFoods.addAll(
+        querySnapshot.docs
+            .map(
+              (doc) => FoodModel.fromJson(doc.data() as Map<String, dynamic>),
+            )
+            .toList(),
+      );
+    } catch (e) {
+      log("Error fetching Foods: $e");
+    }
+  }
+
+  Future<void> fetchEvents() async {
+    try {
+      var banquetId = FirebaseAuth.instance.currentUser!.uid;
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('banquet')
+          .doc(banquetId)
+          .collection('events')
+          .get();
+
+      myEvents.clear();
+      myEvents.addAll(
+        querySnapshot.docs
+            .map(
+              (doc) => EventModel.fromJson(doc.data() as Map<String, dynamic>),
+            )
+            .toList(),
+      );
+    } catch (e) {
+      log("Error fetching Events: $e");
+    }
   }
 
   Future<bool> addEvent(
@@ -51,7 +131,7 @@ class BanquetController extends GetxController {
       EasyLoading.dismiss();
 
       isAdded = true;
-
+      fetchEvents();
       log('Event added successfully');
     } catch (e) {
       EasyLoading.dismiss();
@@ -103,29 +183,6 @@ class BanquetController extends GetxController {
             .toList(),
       );
       isRequestFetched.value = true;
-    } catch (e) {
-      log("Error fetching and appending banquets: $e");
-    }
-  }
-
-  Future<void> fetchBanquets() async {
-    try {
-      QuerySnapshot querySnapshot =
-          await FirebaseFirestore.instance.collection('banquet').get();
-
-      banquets.clear();
-      log('Banquets');
-      log(querySnapshot.toString());
-      banquets.addAll(
-        querySnapshot.docs
-            .map(
-              (doc) => Banquet.fromJson(doc.data() as Map<String, dynamic>),
-            )
-            .toList(),
-      );
-
-      log('Banquets');
-      log(banquets.toString());
     } catch (e) {
       log("Error fetching and appending banquets: $e");
     }

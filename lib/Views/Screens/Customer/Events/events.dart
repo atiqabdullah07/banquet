@@ -1,10 +1,15 @@
 import 'package:banquet/App%20Constants/constants.dart';
+import 'package:banquet/Controllers/customer_controller.dart';
+import 'package:banquet/Models/event_model.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class Events extends StatelessWidget {
-  const Events({super.key});
+  Events({super.key});
+
+  final CustomerController _customerController = Get.put(CustomerController());
 
   @override
   Widget build(BuildContext context) {
@@ -14,19 +19,26 @@ class Events extends StatelessWidget {
           backgroundColor: AppColors.backgroundColor,
           title: const Text('Upcomming Events'),
         ),
-        body: ListView.builder(
-          itemCount: 2,
-          itemBuilder: (context, index) {
-            return const EventsCard();
-          },
-        ));
+        body: Obx(() {
+          return ListView.builder(
+            itemCount: _customerController.allEvents.length,
+            itemBuilder: (context, index) {
+              return EventsCard(
+                event: _customerController.allEvents[index],
+              );
+            },
+          );
+        }));
   }
 }
 
 class EventsCard extends StatelessWidget {
   const EventsCard({
     super.key,
+    required this.event,
   });
+
+  final EventModel event;
 
   @override
   Widget build(BuildContext context) {
@@ -46,17 +58,31 @@ class EventsCard extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(12),
-              child: Container(
-                width: 100.w,
-                decoration: BoxDecoration(
-                  image: const DecorationImage(
-                      fit: BoxFit.fill,
-                      image: NetworkImage(
-                          'https://i.pinimg.com/originals/85/7a/bc/857abcdd95af8530c9d022f5cb420932.png')),
-                  color: AppColors.backgroundColor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
+              child: event.image == null || event.image == ''
+                  ? Container(
+                      width: 100.w,
+                      decoration: BoxDecoration(
+                        color: AppColors.secondaryColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'Event',
+                          style: TextStyle(color: AppColors.primaryColor),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      width: 100.w,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: NetworkImage(event.image!),
+                        ),
+                        color: AppColors.backgroundColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
             ),
             Expanded(
               child: Padding(
@@ -68,16 +94,16 @@ class EventsCard extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Row(
+                        Row(
                           children: [
                             Expanded(
                               child: Padding(
-                                padding: EdgeInsets.only(right: 20),
+                                padding: const EdgeInsets.only(right: 20),
                                 child: Text(
-                                  'Small Trip Expo',
+                                  event.title,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: AppColors.black,
                                       fontSize: 18,
                                       fontWeight: FontWeight.w500),
@@ -87,7 +113,7 @@ class EventsCard extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          'Buissness Expo new enterpenuer to seek buissness insights at 2:00 pm',
+                          event.content,
                           style: TextStyle(
                               color: AppColors.black.withOpacity(0.7)),
                           overflow: TextOverflow.ellipsis,
@@ -98,13 +124,13 @@ class EventsCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Expanded(
+                        Expanded(
                           child: Text(
-                            'Mehria Marquee',
+                            event.banquetname,
                             overflow: TextOverflow.ellipsis,
                             softWrap: false,
                             maxLines: 1,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: AppColors.primaryColor,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -112,11 +138,11 @@ class EventsCard extends StatelessWidget {
                         SizedBox(
                           width: 5.w,
                         ),
-                        const Align(
+                        Align(
                           alignment: Alignment.centerRight,
                           child: Text(
-                            '26 Jan 2024',
-                            style: TextStyle(fontSize: 14),
+                            event.date,
+                            style: const TextStyle(fontSize: 14),
                           ),
                         ),
                       ],

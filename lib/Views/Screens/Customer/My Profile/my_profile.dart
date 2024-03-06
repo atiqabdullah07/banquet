@@ -93,10 +93,8 @@ class _MyProfileState extends State<MyProfile> {
               profileButton(
                   title: 'Wishlist',
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const Wishlist()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Wishlist()));
                   }),
               height(10),
               profileButton(

@@ -63,7 +63,7 @@ class _SetupProfile01State extends State<SetupProfile01> {
 
       return fileSizeInMB;
     } catch (e) {
-      print('Error getting file size: $e');
+      log('Error getting file size: $e');
       return -1.0; // Return a default value or handle the error accordingly
     }
   }
