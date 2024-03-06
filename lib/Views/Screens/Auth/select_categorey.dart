@@ -17,84 +17,87 @@ class _CategoreyPageState extends State<CategoreyPage> {
   var isSelected = 0;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 20.h,
-          ),
-          titleText(title: 'Continue As?'),
-          Text(
-            "Select a Category to begin.",
-            style: TextStyle(
-              color: AppColors.black.withOpacity(0.5),
-              fontSize: 14,
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: AppColors.backgroundColor,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 20.h,
             ),
-          ),
-          SizedBox(
-            height: 60.h,
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              categoreyCard(
-                  isSelected: isSelected == 1 ? true : false,
-                  image: "assets/customer.png",
-                  title: "Customer",
-                  onPress: () {
-                    setState(() {
-                      isSelected = 1;
-                    });
-                  }),
-              SizedBox(
-                width: 20.w,
+            titleText(title: 'Continue As?'),
+            Text(
+              "Select a Category to begin.",
+              style: TextStyle(
+                color: AppColors.black.withOpacity(0.5),
+                fontSize: 14,
               ),
-              categoreyCard(
-                  image: "assets/banquet.png",
-                  title: "Banquet",
-                  isSelected: isSelected == 2 ? true : false,
-                  onPress: () {
-                    setState(() {
-                      isSelected = 2;
-                    });
-                  })
-            ],
-          ),
-          SizedBox(
-            height: 100.h,
-          ),
-          CustomButton(
-            title: "Lets Get Started",
-            nextIcon: true,
-            onPress: () {
-              //     addDummyData();
+            ),
+            SizedBox(
+              height: 60.h,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                categoreyCard(
+                    isSelected: isSelected == 1 ? true : false,
+                    image: "assets/customer.png",
+                    title: "Customer",
+                    onPress: () {
+                      setState(() {
+                        isSelected = 1;
+                      });
+                    }),
+                SizedBox(
+                  width: 20.w,
+                ),
+                categoreyCard(
+                    image: "assets/banquet.png",
+                    title: "Banquet",
+                    isSelected: isSelected == 2 ? true : false,
+                    onPress: () {
+                      setState(() {
+                        isSelected = 2;
+                      });
+                    })
+              ],
+            ),
+            SizedBox(
+              height: 100.h,
+            ),
+            CustomButton(
+              title: "Lets Get Started",
+              nextIcon: true,
+              onPress: () {
+                //     addDummyData();
 
-              if (isSelected == 1) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const Login(
-                            role: 'customer',
-                          )),
-                );
-              } else if (isSelected == 2) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const Login(
-                            role: 'banquet',
-                          )),
-                );
-              }
-            },
-            color: isSelected == 0
-                ? AppColors.black.withOpacity(0.5)
-                : AppColors.primaryColor,
-          )
-        ],
+                if (isSelected == 1) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const Login(
+                              role: 'customer',
+                            )),
+                  );
+                } else if (isSelected == 2) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const Login(
+                              role: 'banquet',
+                            )),
+                  );
+                }
+              },
+              color: isSelected == 0
+                  ? AppColors.black.withOpacity(0.5)
+                  : AppColors.primaryColor,
+            )
+          ],
+        ),
       ),
     );
   }

@@ -6,15 +6,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class SignUp extends StatelessWidget {
-  SignUp({super.key, required this.role});
+class SignUp extends StatefulWidget {
+  const SignUp({super.key, required this.role});
   final String role;
+
+  @override
+  State<SignUp> createState() => _SignUpState();
+}
+
+class _SignUpState extends State<SignUp> {
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
+
   final TextEditingController nameController = TextEditingController();
+
   final TextEditingController confirmPasswordController =
       TextEditingController();
+
   final AuthController authController = Get.put(AuthController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +71,8 @@ class SignUp extends StatelessWidget {
                         nameController.text,
                         emailController.text,
                         passwordController.text,
-                        role: role,
+                        confirmPasswordController.text,
+                        role: widget.role,
                       );
                     }),
                 height(150)

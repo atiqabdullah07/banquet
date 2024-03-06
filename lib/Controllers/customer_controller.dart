@@ -56,6 +56,7 @@ class CustomerController extends GetxController {
     //  List<String> wishlistedBanquetUids = [];
 
     var userUid = firebaseAuth.currentUser!.uid;
+    myWishlist.clear();
 
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -68,13 +69,8 @@ class CustomerController extends GetxController {
       }).toList();
 
       myWishlist.addAll(wishlistedBanquets);
-
-      // // Iterate through the query results and extract banquet UIDs
-      // querySnapshot.docs.forEach((banquetDoc) {
-      //   wishlistedBanquetUids.add(banquetDoc.id);
-      // });
     } catch (e) {
-      print("Error fetching wishlisted banquets: $e");
+      log("Error fetching wishlisted banquets: $e");
     }
   }
 

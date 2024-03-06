@@ -147,22 +147,29 @@ class _BanquetDashboardState extends State<BanquetDashboard> {
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
                                     "Hello!",
                                     style: TextStyle(
                                       color: AppColors.black.withOpacity(0.5),
-                                      fontSize: 20,
+                                      fontSize: 16,
                                     ),
                                   ),
                                   Text(
                                     _banquetProfileController
-                                        .myBanquet.value.name
-                                        .toString(),
+                                                .myBanquet.value.name
+                                                .toString()
+                                                .length >
+                                            10
+                                        ? '${_banquetProfileController.myBanquet.value.name.toString().substring(0, 10)}...'
+                                        : _banquetProfileController
+                                            .myBanquet.value.name
+                                            .toString(),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
                                     style: const TextStyle(
                                         color: AppColors.black,
-                                        fontSize: 20,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ],

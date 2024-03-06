@@ -49,7 +49,7 @@ Widget whishlistCard({required Banquet banquet}) {
                       height: 100,
                       width: 100,
                       decoration: BoxDecoration(
-                        color: AppColors.primaryColor,
+                        color: AppColors.secondaryColor,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: const Center(
@@ -95,26 +95,13 @@ Widget whishlistCard({required Banquet banquet}) {
                       size: 24.r,
                       color: Colors.yellow,
                     ),
-                    Icon(
-                      Icons.star,
-                      size: 24.r,
-                      color: Colors.yellow,
+                    const SizedBox(
+                      width: 5,
                     ),
-                    Icon(
-                      Icons.star,
-                      size: 24.r,
-                      color: Colors.yellow,
-                    ),
-                    Icon(
-                      Icons.star,
-                      size: 24.r,
-                      color: Colors.yellow,
-                    ),
-                    Icon(
-                      Icons.star,
-                      size: 24.r,
-                      color: Colors.yellow,
-                    ),
+                    const Text(
+                      '4.0',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    )
                   ],
                 ),
               ],
@@ -127,7 +114,7 @@ Widget whishlistCard({required Banquet banquet}) {
               onPressed: () {},
               icon: const Icon(
                 Icons.delete,
-                color: AppColors.black,
+                color: AppColors.secondaryColor,
               )),
         )
       ]),

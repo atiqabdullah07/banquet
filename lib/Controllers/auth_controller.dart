@@ -43,12 +43,15 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> signOut() async {
+  Future<bool> signOut() async {
+    var isLoggedOut = false;
     try {
       await FirebaseAuth.instance.signOut();
+      isLoggedOut = true;
     } catch (e) {
       log('Error signing out: $e');
     }
+    return isLoggedOut;
   }
 
   //Upload the Profile Picture
@@ -71,50 +74,57 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> registerUser(String username, String email, String password,
+  Future<void> registerUser(
+      String username, String email, String password, String confitmPassword,
       {required String role}) async {
     try {
       log('Role: $role');
       easyLoading();
       if (username.isNotEmpty && password.isNotEmpty && email.isNotEmpty) {
-        UserCredential cred = await firebaseAuth.createUserWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-
-        if (role == 'customer') {
-          // Create a new customer document in the 'customers' collection
-          Customer customer = Customer(
+        if (password == confitmPassword) {
+          UserCredential cred =
+              await firebaseAuth.createUserWithEmailAndPassword(
             email: email,
-            name: username,
-            profilePhoto: '',
-            uid: cred.user!.uid,
+            password: password,
           );
 
-          await firestore
-              .collection(role)
-              .doc(cred.user!.uid)
-              .set(customer.toJson());
+          if (role == 'customer') {
+            // Create a new customer document in the 'customers' collection
+            Customer customer = Customer(
+              email: email,
+              name: username,
+              profilePhoto: '',
+              uid: cred.user!.uid,
+            );
 
+            await firestore
+                .collection(role)
+                .doc(cred.user!.uid)
+                .set(customer.toJson());
+
+            EasyLoading.dismiss();
+            Get.to(const Login(
+                role: 'customer')); // navigate to login screen for customer
+            Get.snackbar('User', 'Customer Added Successfully');
+            log('Customer Added Successfully');
+          } else if (role == 'banquet') {
+            Banquet banquet = Banquet(
+              email: email,
+              name: username,
+              uid: cred.user!.uid,
+            );
+            await firestore
+                .collection(role)
+                .doc(cred.user!.uid)
+                .set(banquet.toJson());
+            EasyLoading.dismiss();
+            Get.to(const Login(
+                role: 'banquet')); // navigate to login screen for customer
+            Get.snackbar('Banquet', 'Banquet Added Successfully');
+          }
+        } else {
           EasyLoading.dismiss();
-          Get.to(const Login(
-              role: 'customer')); // navigate to login screen for customer
-          Get.snackbar('User', 'Customer Added Successfully');
-          log('Customer Added Successfully');
-        } else if (role == 'banquet') {
-          Banquet banquet = Banquet(
-            email: email,
-            name: username,
-            uid: cred.user!.uid,
-          );
-          await firestore
-              .collection(role)
-              .doc(cred.user!.uid)
-              .set(banquet.toJson());
-          EasyLoading.dismiss();
-          Get.to(const Login(
-              role: 'banquet')); // navigate to login screen for customer
-          Get.snackbar('Banquet', 'Banquet Added Successfully');
+          Get.snackbar('Error', 'pasword and confirm password must be same');
         }
       } else {
         EasyLoading.dismiss();

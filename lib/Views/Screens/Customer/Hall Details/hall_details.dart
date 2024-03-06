@@ -33,16 +33,6 @@ class _HallDetailsState extends State<HallDetails> {
   final CustomerController _customerController = Get.put(CustomerController());
 
   @override
-  void initState() {
-    super.initState();
-
-    _customerController.banquets[widget.index].wishlist!
-            .contains(firebaseAuth.currentUser!.uid)
-        ? _customerController.toggleWishlistButton.value = true
-        : _customerController.toggleWishlistButton.value = false;
-  }
-
-  @override
   Widget build(BuildContext context) {
     var images = const [
       NetworkImage(
