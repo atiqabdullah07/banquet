@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_null_comparison
+// ignore_for_file: unnecessary_null_comparison, use_build_context_synchronously
 
 import 'dart:developer';
 import 'dart:io';
@@ -306,19 +306,31 @@ class _SetupProfile01State extends State<SetupProfile01> {
                     Center(
                       child: appButton(
                         title: 'Save',
-                        onTap: () {
+                        onTap: () async {
                           if (_formKey.currentState!.validate()) {
-                            banquetController.updateBanquetInfoForCurrentUser(
-                                Banquet(
-                                  venueType: selectedValue.toString(),
-                                  parkingCapacity: _parkingController.text,
-                                  guestsCapacity: _guestsController.text,
-                                  bookingPrice: _bookingPriceController.text,
-                                  facilities: _facilitiesController.text,
-                                  description: _descriptionController.text,
-                                  location: _locationController.text,
-                                ),
-                                pickedImage!);
+                            log('message');
+                            bool isUpdated = await banquetController
+                                .updateBanquetInfoForCurrentUser(
+                                    Banquet(
+                                      venueType: selectedValue.toString(),
+                                      parkingCapacity: _parkingController.text,
+                                      guestsCapacity: _guestsController.text,
+                                      bookingPrice:
+                                          _bookingPriceController.text,
+                                      facilities: _facilitiesController.text,
+                                      description: _descriptionController.text,
+                                      location: _locationController.text,
+                                    ),
+                                    pickedImage);
+
+                            if (isUpdated == true) {
+                              showDialog(
+                                  context: context,
+                                  builder: ((context) => CustomDialogWidget(
+                                      title: 'Profile Updated',
+                                      message:
+                                          'Profile Updated Successfully')));
+                            }
                           }
                         },
                       ),

@@ -39,6 +39,62 @@ class BanquetController extends GetxController {
     await fetchFoods();
   }
 
+  Future<bool> editFood({required FoodModel food}) async {
+    bool isUpdated = false;
+
+    log('Food ID: ${food.id}');
+    try {
+      easyLoading();
+      String currentUserId = firebaseAuth.currentUser!.uid;
+      log('Current User: $currentUserId');
+      await firestore
+          .collection('banquet')
+          .doc(currentUserId)
+          .collection('foods')
+          .doc(food.id)
+          .update(
+        {'date': food.date, 'title': food.title, 'content': food.content},
+      ).then(
+        (value) async {
+          EasyLoading.dismiss();
+          await fetchFoods();
+          isUpdated = true;
+        },
+      );
+    } catch (error) {
+      log('editFood Catched Error: $error');
+    }
+    return isUpdated;
+  }
+
+  Future<bool> deleteFood(String foodId) async {
+    bool isDeleted = false;
+    try {
+      easyLoading();
+      String currentUserId = firebaseAuth.currentUser!.uid;
+
+      await firestore
+          .collection('banquet')
+          .doc(currentUserId)
+          .collection('foods')
+          .doc(foodId)
+          .delete();
+
+      EasyLoading.dismiss();
+
+      isDeleted = true;
+
+      fetchFoods();
+
+      log('Food deleted successfully');
+    } catch (e) {
+      EasyLoading.dismiss();
+      log('Error deleting Food: $e');
+      rethrow;
+    }
+    return isDeleted;
+  }
+
   Future<bool> addFood(
     FoodModel food,
   ) async {
@@ -50,9 +106,10 @@ class BanquetController extends GetxController {
           .collection('banquet')
           .doc(currentUserId)
           .collection('foods')
-          .add(
-            food.toJson(),
-          );
+          .add(food.toJson())
+          .then((DocumentReference docRef) {
+        docRef.update({'id': docRef.id});
+      });
 
       EasyLoading.dismiss();
 
@@ -214,13 +271,13 @@ class BanquetController extends GetxController {
     }
   }
 
-  Future<void> addMenu(PackageMenu menu) async {
+  Future<bool> addMenu(PackageMenu menu) async {
+    bool isAdded = false;
     try {
       easyLoading();
 
       String currentUserId = firebaseAuth.currentUser!.uid;
 
-      // Update the 'menu' field in the banquet document with the new menu
       await firestore.collection('banquet').doc(currentUserId).update({
         'menu': FieldValue.arrayUnion([menu.toJson()]),
       });
@@ -228,7 +285,7 @@ class BanquetController extends GetxController {
       EasyLoading.dismiss();
       await _banquetProfileController.getAuthenticatedUserBanquetInfo();
 
-      Get.snackbar('Success', 'Menu Added Successfully');
+      isAdded = true;
 
       log('Menu added successfully');
     } catch (e) {
@@ -236,6 +293,7 @@ class BanquetController extends GetxController {
       log('Error adding menu: $e');
       rethrow;
     }
+    return isAdded;
   }
 
   Future<void> sendBookingRequest(Reservation booking, String banquetID) async {
@@ -260,35 +318,58 @@ class BanquetController extends GetxController {
     }
   }
 
-  Future<void> updateBanquetInfoForCurrentUser(
-      Banquet banquet, File image) async {
+  Future<bool> updateBanquetInfoForCurrentUser(
+      Banquet banquet, File? image) async {
+    bool isUpdated = false;
+    log('Function Called');
     try {
       easyLoading();
       // Get the UID of the currently authenticated user
       String currentUserId = firebaseAuth.currentUser!.uid;
 
-      String banquetLogo = await uploadProfilePic(image);
+      if (image != null) {
+        String banquetLogo = await uploadProfilePic(image);
 
-      // Update the corresponding document in the 'banquet' collection
-      await firestore.collection('banquet').doc(currentUserId).update(
-        {
-          'venueType': banquet.venueType,
-          'logo': banquetLogo,
-          'parkingCapacity': banquet.parkingCapacity,
-          'guestsCapacity': banquet.guestsCapacity,
-          'bookingPrice': banquet.bookingPrice,
-          'facilities': banquet.facilities,
-          'description': banquet.description,
-          'location': banquet.location,
-        },
-      ).then(
-        (value) async {
-          EasyLoading.dismiss();
-          await _banquetProfileController.getAuthenticatedUserBanquetInfo();
-          Get.snackbar('Sucess', "Profile Edited Successfully");
-        },
-      );
-      EasyLoading.dismiss();
+        // Update the corresponding document in the 'banquet' collection
+        await firestore.collection('banquet').doc(currentUserId).update(
+          {
+            'venueType': banquet.venueType,
+            'logo': banquetLogo,
+            'parkingCapacity': banquet.parkingCapacity,
+            'guestsCapacity': banquet.guestsCapacity,
+            'bookingPrice': banquet.bookingPrice,
+            'facilities': banquet.facilities,
+            'description': banquet.description,
+            'location': banquet.location,
+          },
+        ).then(
+          (value) async {
+            EasyLoading.dismiss();
+            await _banquetProfileController.getAuthenticatedUserBanquetInfo();
+            isUpdated = true;
+          },
+        );
+        EasyLoading.dismiss();
+      } else {
+        await firestore.collection('banquet').doc(currentUserId).update(
+          {
+            'venueType': banquet.venueType,
+            'parkingCapacity': banquet.parkingCapacity,
+            'guestsCapacity': banquet.guestsCapacity,
+            'bookingPrice': banquet.bookingPrice,
+            'facilities': banquet.facilities,
+            'description': banquet.description,
+            'location': banquet.location,
+          },
+        ).then(
+          (value) async {
+            EasyLoading.dismiss();
+            await _banquetProfileController.getAuthenticatedUserBanquetInfo();
+            isUpdated = true;
+          },
+        );
+        EasyLoading.dismiss();
+      }
 
       log('Banquet information updated successfully');
     } catch (e) {
@@ -296,6 +377,8 @@ class BanquetController extends GetxController {
       log('Error updating banquet information: $e');
       rethrow;
     }
+
+    return isUpdated;
   }
 
   Future<void> acceptBooking(String bookingUid) async {

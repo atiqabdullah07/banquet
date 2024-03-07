@@ -111,7 +111,7 @@ class BanquetFoodsCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          food.banquetname,
+                          food.banquetname!,
                           style: const TextStyle(
                               fontSize: 14,
                               color: AppColors.primaryColor,

@@ -12,22 +12,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class AddFood extends StatefulWidget {
-  const AddFood({super.key});
+class EditFood extends StatefulWidget {
+  const EditFood({super.key, required this.food});
+
+  final FoodModel food;
 
   @override
-  State<AddFood> createState() => _AddFoodState();
+  State<EditFood> createState() => _EditFoodState();
 }
 
-class _AddFoodState extends State<AddFood> {
-  final TextEditingController _foodTitleController = TextEditingController();
+class _EditFoodState extends State<EditFood> {
+  late TextEditingController _foodTitleController;
 
-  final TextEditingController _foodDetailsController = TextEditingController();
+  late TextEditingController _foodDetailsController;
 
   final BanquetController banquetController = Get.put(BanquetController());
   final BanquetProfileController _banquetProfileController =
       Get.put(BanquetProfileController());
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    banquetController.foodDate.value = widget.food.date.toString();
+
+    _foodTitleController =
+        TextEditingController(text: widget.food.title.toString());
+    _foodDetailsController =
+        TextEditingController(text: widget.food.content.toString());
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -44,17 +57,10 @@ class _AddFoodState extends State<AddFood> {
   }
 
   @override
-  void initState() {
-    banquetController.foodDate.value =
-        dateTypeConverter(date: DateTime.now().toString());
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Food'),
+        title: const Text('Edit Food'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -81,7 +87,8 @@ class _AddFoodState extends State<AddFood> {
                             onTap: () => _selectDate(context),
                             child: TextFormField(
                               controller: TextEditingController(
-                                  text: banquetController.foodDate.toString()),
+                                  text: banquetController.foodDate.value
+                                      .toString()),
                               decoration: InputDecoration(
                                 disabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -92,8 +99,6 @@ class _AddFoodState extends State<AddFood> {
                                     color: AppColors.black.withOpacity(0.5)),
                                 border: const OutlineInputBorder(),
                               ),
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
                             ),
                           ),
                         ),
@@ -145,26 +150,28 @@ class _AddFoodState extends State<AddFood> {
                         height(00),
                         Center(
                           child: appButton(
-                            title: 'Confirm',
+                            title: 'Save Changes',
                             onTap: () async {
                               if (_formKey.currentState!.validate()) {
-                                var addFood = await banquetController.addFood(
-                                    FoodModel(
-                                        banquetname: _banquetProfileController
-                                            .myBanquet.value.name
-                                            .toString(),
-                                        title: _foodTitleController.text,
-                                        content: _foodDetailsController.text,
-                                        date: banquetController.foodDate
-                                            .toString()));
+                                var isUpdated =
+                                    await banquetController.editFood(
+                                        food: FoodModel(
+                                            id: widget.food.id,
+                                            title: _foodTitleController.text,
+                                            content:
+                                                _foodDetailsController.text,
+                                            date: banquetController
+                                                .foodDate.value
+                                                .toString()));
                                 Navigator.of(context).pop();
 
-                                if (addFood == true) {
+                                if (isUpdated == true) {
                                   showDialog(
                                     context: context,
                                     builder: (context) => CustomDialogWidget(
-                                        title: 'Food Added',
-                                        message: 'Food Added Sucessfully'),
+                                        title: 'Success',
+                                        message:
+                                            'Food Post Edited Sucessfully'),
                                   );
                                   _foodTitleController.clear();
                                   _foodDetailsController.clear();

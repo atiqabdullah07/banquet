@@ -36,19 +36,25 @@ class BanquetEvents extends StatelessWidget {
         ),
       ),
       body: Obx(() {
-        return ListView.builder(
-          itemCount: _banquetController.myEvents.length,
-          itemBuilder: (context, index) {
-            var event = _banquetController.myEvents[index];
-            return BanquetEventsCard(
-              event: EventModel(
-                  banquetname: event.banquetname,
-                  title: event.title,
-                  content: event.content,
-                  date: event.date),
-            );
-          },
-        );
+        if (_banquetController.myEvents.isEmpty) {
+          return const Center(
+            child: Text('No Events'),
+          );
+        } else {
+          return ListView.builder(
+            itemCount: _banquetController.myEvents.length,
+            itemBuilder: (context, index) {
+              var event = _banquetController.myEvents[index];
+              return BanquetEventsCard(
+                event: EventModel(
+                    banquetname: event.banquetname,
+                    title: event.title,
+                    content: event.content,
+                    date: event.date),
+              );
+            },
+          );
+        }
       }),
     );
   }
@@ -78,8 +84,6 @@ class BanquetEventsCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-         
-         
             Padding(
               padding: const EdgeInsets.all(12),
               child: event.image == null || event.image == ''
@@ -108,8 +112,6 @@ class BanquetEventsCard extends StatelessWidget {
                       ),
                     ),
             ),
-         
-         
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(right: 20, bottom: 15, top: 15),

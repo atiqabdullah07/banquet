@@ -247,6 +247,7 @@ class _AddEventState extends State<AddEvent> {
                                         banquetController.eventDate.toString(),
                                   ),
                                 );
+                                Navigator.of(context).pop();
                                 if (addEvent == true) {
                                   showDialog(
                                     context: context,
@@ -254,7 +255,6 @@ class _AddEventState extends State<AddEvent> {
                                         title: 'Event Added',
                                         message: 'Event Posted Sucessfully'),
                                   );
-                                  Navigator.of(context).pop();
 
                                   _eventNameController.clear();
                                   _detailsController.clear();

@@ -27,6 +27,7 @@ class _LoginState extends State<Login> {
   final TextEditingController emailController = TextEditingController();
 
   final TextEditingController passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -43,46 +44,94 @@ class _LoginState extends State<Login> {
             children: [
               titleText(title: 'Login'),
               height(120),
-              Column(
-                children: [
-                  AppTextField(
-                    hintText: 'Enter Email',
-                    controller: emailController,
-                  ),
-                  height(15),
-                  AppTextField(
-                    hintText: 'Enter Password',
-                    controller: passwordController,
-                    isObsecure: true,
-                  ),
-                  height(35),
-                  CustomButton(
-                    title: 'Login',
-                    onPress: () async {
-                      bool isLoggedIn = await authController.loginUser(
-                          emailController.text,
-                          passwordController.text,
-                          widget.role);
+              Form(
+                key: _formKey,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: [
+                      height(15),
+                      TextFormField(
+                        controller: emailController,
+                        keyboardType: TextInputType
+                            .emailAddress, // Use email address keyboard type
+                        decoration: InputDecoration(
+                          hintText: 'Email',
+                          hintStyle: TextStyle(
+                            color: AppColors.black.withOpacity(0.5),
+                          ),
+                          border: const OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please Enter Email';
+                          }
 
-                      if (isLoggedIn == true) {
-                        if (widget.role == 'customer') {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const CustomerHome()),
-                          );
-                        } else if (widget.role == 'banquet') {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const BanquetHome()),
-                          );
-                        }
-                      }
-                    },
+                          String emailRegex =
+                              r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$';
+                          RegExp regex = RegExp(emailRegex);
+
+                          if (!regex.hasMatch(value)) {
+                            return 'Please Enter a Valid Email';
+                          }
+
+                          return null;
+                        },
+                      ),
+                      height(15),
+                      TextFormField(
+                        controller: passwordController,
+                        keyboardType: TextInputType.visiblePassword,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          hintText: 'Password',
+                          hintStyle: TextStyle(
+                            color: AppColors.black.withOpacity(0.5),
+                          ),
+                          border: const OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Enter a password';
+                          }
+
+                          return null;
+                        },
+                      ),
+                      height(35),
+                      CustomButton(
+                        title: 'Login',
+                        onPress: () async {
+                          if (_formKey.currentState!.validate()) {
+                            bool isLoggedIn = await authController.loginUser(
+                                emailController.text,
+                                passwordController.text,
+                                widget.role);
+
+                            if (isLoggedIn == true) {
+                              if (widget.role == 'customer') {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const CustomerHome()),
+                                );
+                              } else if (widget.role == 'banquet') {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const BanquetHome()),
+                                );
+                              }
+                            }
+                          }
+                        },
+                      ),
+                      height(150)
+                    ],
                   ),
-                  height(150)
-                ],
+                ),
               ),
               height(120),
               Padding(

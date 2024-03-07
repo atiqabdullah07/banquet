@@ -1,14 +1,16 @@
 class FoodModel {
-  String banquetname;
+  String? banquetname;
   String title;
   String content;
   String date;
+  String? id;
 
   FoodModel({
-    required this.banquetname,
+    this.banquetname,
     required this.title,
     required this.content,
     required this.date,
+    this.id,
   });
 
   factory FoodModel.fromJson(Map<String, dynamic> json) {
@@ -17,6 +19,7 @@ class FoodModel {
       title: json['title'],
       content: json['content'],
       date: json['date'],
+      id: json['id'],
     );
   }
 
@@ -26,6 +29,7 @@ class FoodModel {
       'title': title,
       'content': content,
       'date': date,
+      'id': id,
     };
   }
 }

@@ -29,19 +29,19 @@ class AuthController extends GetxController {
   //   ever(user, setInitialScreen);
   // }
 
-  setInitialScreen(User? user) {
-    if (user == null) {
-      Get.offAll(
-        () => const Login(
-          role: '',
-        ),
-      );
-    } else {
-      Get.offAll(
-        () => const CustomerHome(),
-      );
-    }
-  }
+  // setInitialScreen(User? user) {
+  //   if (user == null) {
+  //     Get.offAll(
+  //       () => const Login(
+  //         role: '',
+  //       ),
+  //     );
+  //   } else {
+  //     Get.offAll(
+  //       () => const CustomerHome(),
+  //     );
+  //   }
+  // }
 
   Future<bool> signOut() async {
     var isLoggedOut = false;
@@ -105,7 +105,7 @@ class AuthController extends GetxController {
             EasyLoading.dismiss();
             Get.to(const Login(
                 role: 'customer')); // navigate to login screen for customer
-            Get.snackbar('User', 'Customer Added Successfully');
+            Get.snackbar('Customer', 'Account has been created successfully');
             log('Customer Added Successfully');
           } else if (role == 'banquet') {
             Banquet banquet = Banquet(
@@ -120,7 +120,7 @@ class AuthController extends GetxController {
             EasyLoading.dismiss();
             Get.to(const Login(
                 role: 'banquet')); // navigate to login screen for customer
-            Get.snackbar('Banquet', 'Banquet Added Successfully');
+            Get.snackbar('Banquet', 'Account has been created successfully');
           }
         } else {
           EasyLoading.dismiss();

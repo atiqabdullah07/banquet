@@ -1,7 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:developer';
+
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/Controllers/banquet_controller.dart';
 import 'package:banquet/Models/food_model.dart';
 import 'package:banquet/Views/Screens/Banquet/Events/add_food.dart';
+import 'package:banquet/Views/Screens/Banquet/Events/edit_food.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,18 +37,40 @@ class BanquetFoodEvents extends StatelessWidget {
         ),
       ),
       body: Obx(() {
-        return ListView.builder(
-          itemCount: _banquetController.myFoods.length,
-          itemBuilder: (context, index) {
-            var food = _banquetController.myFoods[index];
-            return BanquetFoodsCard(
+        if (_banquetController.myFoods.isEmpty) {
+          return const Center(
+            child: Text('No Foods'),
+          );
+        } else {
+          return ListView.builder(
+            itemCount: _banquetController.myFoods.length,
+            itemBuilder: (context, index) {
+              var food = _banquetController.myFoods[index];
+              return BanquetFoodsCard(
                 food: FoodModel(
                     banquetname: food.banquetname,
                     title: food.title,
                     content: food.content,
-                    date: food.date));
-          },
-        );
+                    date: food.date),
+                onDelete: () async {
+                  bool isDeleted =
+                      await _banquetController.deleteFood(food.id.toString());
+                  if (isDeleted == true) {
+                    showDialog(
+                        context: context,
+                        builder: ((context) => CustomDialogWidget(
+                            title: 'Success',
+                            message: "Food Post Deleted Successfully")));
+                  }
+                },
+                onEdit: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => EditFood(food: food,)));
+                },
+              );
+            },
+          );
+        }
       }),
     );
   }
@@ -53,10 +80,13 @@ class BanquetFoodsCard extends StatelessWidget {
   const BanquetFoodsCard({
     super.key,
     required this.food,
+    required this.onDelete,
+    required this.onEdit,
   });
 
   final FoodModel food;
-
+  final VoidCallback onDelete;
+  final VoidCallback onEdit;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -129,12 +159,12 @@ class BanquetFoodsCard extends StatelessWidget {
                         Row(
                           children: [
                             GestureDetector(
-                              onTap: () {},
+                              onTap: onEdit,
                               child: const Icon(Icons.edit),
                             ),
                             const SizedBox(width: 20),
                             GestureDetector(
-                              onTap: () {},
+                              onTap: onDelete,
                               child: const Icon(
                                 Icons.delete,
                                 color: Colors.brown,

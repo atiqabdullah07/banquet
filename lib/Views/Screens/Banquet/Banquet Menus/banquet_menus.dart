@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_null_comparison
+// ignore_for_file: unnecessary_null_comparison, use_build_context_synchronously
 
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
@@ -88,7 +88,6 @@ class _AddMenuState extends State<AddMenu> {
 
                           return null;
                         },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
                       ),
                     ),
                     subTitleText(title: 'Main Menu'),
@@ -113,7 +112,6 @@ class _AddMenuState extends State<AddMenu> {
                           }
                           return null;
                         },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
                       ),
                     ),
                     subTitleText(title: 'Desserts'),
@@ -135,7 +133,6 @@ class _AddMenuState extends State<AddMenu> {
                           }
                           return null;
                         },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
                       ),
                     ),
                     subTitleText(title: 'Drinks'),
@@ -160,13 +157,12 @@ class _AddMenuState extends State<AddMenu> {
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                       ),
                     ),
-                    height(00),
                     Center(
                       child: appButton(
                         title: 'Add New',
-                        onTap: () {
+                        onTap: () async {
                           if (_formKey.currentState!.validate()) {
-                            banquetController.addMenu(
+                            bool isAdded = await banquetController.addMenu(
                               PackageMenu(
                                   name: _packageNameController.text,
                                   price: _priceController.text,
@@ -174,6 +170,23 @@ class _AddMenuState extends State<AddMenu> {
                                   desserts: _dessertsController.text,
                                   drinks: _drinksController.text),
                             );
+                            Navigator.of(context).pop();
+
+                            if (isAdded == true) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => CustomDialogWidget(
+                                    title: 'Menu Added',
+                                    message: 'Menu Added Sucessfully'),
+                              );
+
+                              _formKey.currentState!.dispose();
+                              _packageNameController.clear();
+                              _priceController.clear();
+                              _mainMenuController.clear();
+                              _dessertsController.clear();
+                              _drinksController.clear();
+                            }
                           }
                         },
                       ),
@@ -182,7 +195,7 @@ class _AddMenuState extends State<AddMenu> {
                 ),
               ),
               const SizedBox(
-                height: 200,
+                height: 80,
               )
             ],
           ),
