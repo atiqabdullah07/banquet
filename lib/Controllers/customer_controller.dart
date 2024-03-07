@@ -74,6 +74,26 @@ class CustomerController extends GetxController {
     }
   }
 
+  Future<bool> removeFromWishlist({
+    required String id,
+  }) async {
+    bool isRemoved = false;
+    try {
+      easyLoading();
+      var uid = firebaseAuth.currentUser!.uid;
+      await firestore.collection('banquet').doc(id).update({
+        'wishlist': FieldValue.arrayRemove([uid])
+      });
+
+      await fetchWishlist();
+      EasyLoading.dismiss();
+      isRemoved = true;
+    } catch (error) {
+      log('removeFromWishlist Catched Error: $error');
+    }
+    return isRemoved;
+  }
+
   Future<void> addToWishlist({
     required String id,
   }) async {
@@ -86,10 +106,13 @@ class CustomerController extends GetxController {
         await firestore.collection('banquet').doc(id).update({
           'wishlist': FieldValue.arrayRemove([uid])
         });
+
+        //  Get.snackbar('Wishlist', 'Banquet Removed from Wishlist');
       } else {
         await firestore.collection('banquet').doc(id).update({
           'wishlist': FieldValue.arrayUnion([uid])
         });
+        //  Get.snackbar('Wishlist', 'Banquet Added to the Wishlist', snackPosition: );
       }
 
       fetchWishlist();
@@ -101,6 +124,7 @@ class CustomerController extends GetxController {
 
   Future<void> fetchFoods() async {
     try {
+      myFoods.clear();
       QuerySnapshot banquetSnapshot =
           await FirebaseFirestore.instance.collection('banquet').get();
 
@@ -124,6 +148,7 @@ class CustomerController extends GetxController {
 
   Future<void> fetchEvents() async {
     try {
+      allEvents.clear();
       QuerySnapshot banquetSnapshot =
           await FirebaseFirestore.instance.collection('banquet').get();
 

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:math';
 
 import 'package:banquet/App%20Constants/constants.dart';
@@ -270,7 +272,7 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
               Center(
                 child: appButton(
                   title: 'Send Request',
-                  onTap: () {
+                  onTap: () async {
                     int selectedMenuIndex =
                         _banquetController.selectedMenu.value;
                     var slectedMenu =
@@ -281,7 +283,7 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                                 widget.banquet.menu![selectedMenuIndex].price) *
                             _guests);
 
-                    _banquetController.sendBookingRequest(
+                    bool isBooked = await _banquetController.sendBookingRequest(
                         Reservation(
                           bookingPrice: price.toString(),
                           menu: slectedMenu,
@@ -295,6 +297,16 @@ class _ConfirmBookingState extends State<ConfirmBooking> {
                           customer: widget.customer,
                         ),
                         widget.banquet.uid.toString());
+                    Navigator.of(context).pop();
+
+                    if (isBooked == true) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => CustomDialogWidget(
+                            title: 'Request Sent',
+                            message: 'Booking Request Sent Successfully'),
+                      );
+                    }
                   },
                 ),
               ),

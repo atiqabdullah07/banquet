@@ -102,7 +102,7 @@ class _SetupProfile01State extends State<SetupProfile01> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Setup Banquet Profile'),
+        title: const Text('Edit Banquet Profile'),
       ),
       body: SingleChildScrollView(
           child: Obx(
@@ -127,14 +127,27 @@ class _SetupProfile01State extends State<SetupProfile01> {
                                 backgroundColor: Colors.white,
                                 backgroundImage: FileImage(pickedImage!),
                               )
-                            : CircleAvatar(
-                                radius: 48.r,
-                                backgroundColor: Colors.white,
-                                backgroundImage: NetworkImage(
+                            : _banquetProfileController.myBanquet.value.logo ==
+                                        null ||
                                     _banquetProfileController
-                                        .myBanquet.value.logo
-                                        .toString()),
-                              ),
+                                            .myBanquet.value.logo ==
+                                        ''
+                                ? CircleAvatar(
+                                    radius: 48.r,
+                                    backgroundColor: AppColors.secondaryColor,
+                                    child: const Icon(
+                                      Icons.person,
+                                      size: 40,
+                                    ),
+                                  )
+                                : CircleAvatar(
+                                    radius: 48.r,
+                                    backgroundColor: Colors.white,
+                                    backgroundImage: NetworkImage(
+                                        _banquetProfileController
+                                            .myBanquet.value.logo
+                                            .toString()),
+                                  ),
                       ),
                     ),
                     height(10),
@@ -322,6 +335,7 @@ class _SetupProfile01State extends State<SetupProfile01> {
                                       location: _locationController.text,
                                     ),
                                     pickedImage);
+                            Navigator.of(context).pop;
 
                             if (isUpdated == true) {
                               showDialog(

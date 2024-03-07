@@ -138,7 +138,7 @@ class BanquetEventsCard extends StatelessWidget {
                                         maxLines: 1,
                                         style: const TextStyle(
                                             color: AppColors.black,
-                                            fontSize: 18,
+                                            fontSize: 16,
                                             fontWeight: FontWeight.w500),
                                       ),
                                     ),

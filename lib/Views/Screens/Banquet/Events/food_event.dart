@@ -1,7 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:developer';
-
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/Controllers/banquet_controller.dart';
 import 'package:banquet/Models/food_model.dart';
@@ -12,66 +10,82 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class BanquetFoodEvents extends StatelessWidget {
-  BanquetFoodEvents({super.key});
+class BanquetFoodEvents extends StatefulWidget {
+  const BanquetFoodEvents({super.key});
 
+  @override
+  State<BanquetFoodEvents> createState() => _BanquetFoodEventsState();
+}
+
+class _BanquetFoodEventsState extends State<BanquetFoodEvents> {
   final BanquetController _banquetController = Get.put(BanquetController());
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Food Events'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const AddFood()));
-        },
-        backgroundColor: AppColors.primaryColor,
-        child: const Center(
-          child: Icon(
-            Icons.add,
-            color: Colors.white,
+    return RefreshIndicator(
+      color: AppColors.primaryColor,
+      backgroundColor: Colors.white,
+      onRefresh: () async {
+        _banquetController.fetchFoods();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Food Events'),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const AddFood()));
+          },
+          backgroundColor: AppColors.primaryColor,
+          child: const Center(
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
           ),
         ),
+        body: Obx(() {
+          if (_banquetController.myFoods.isEmpty) {
+            return const Center(
+              child: Text('No Foods'),
+            );
+          } else {
+            return ListView.builder(
+              itemCount: _banquetController.myFoods.length,
+              itemBuilder: (context, index) {
+                var food = _banquetController.myFoods[index];
+                return BanquetFoodsCard(
+                  food: FoodModel(
+                      banquetname: food.banquetname,
+                      title: food.title,
+                      content: food.content,
+                      date: food.date),
+                  onDelete: () async {
+                    bool isDeleted =
+                        await _banquetController.deleteFood(food.id.toString());
+                    if (isDeleted == true) {
+                      showDialog(
+                          context: context,
+                          builder: ((context) => CustomDialogWidget(
+                              title: 'Success',
+                              message: "Food Post Deleted Successfully")));
+                    }
+                  },
+                  onEdit: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EditFood(
+                                  food: food,
+                                )));
+                  },
+                );
+              },
+            );
+          }
+        }),
       ),
-      body: Obx(() {
-        if (_banquetController.myFoods.isEmpty) {
-          return const Center(
-            child: Text('No Foods'),
-          );
-        } else {
-          return ListView.builder(
-            itemCount: _banquetController.myFoods.length,
-            itemBuilder: (context, index) {
-              var food = _banquetController.myFoods[index];
-              return BanquetFoodsCard(
-                food: FoodModel(
-                    banquetname: food.banquetname,
-                    title: food.title,
-                    content: food.content,
-                    date: food.date),
-                onDelete: () async {
-                  bool isDeleted =
-                      await _banquetController.deleteFood(food.id.toString());
-                  if (isDeleted == true) {
-                    showDialog(
-                        context: context,
-                        builder: ((context) => CustomDialogWidget(
-                            title: 'Success',
-                            message: "Food Post Deleted Successfully")));
-                  }
-                },
-                onEdit: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => EditFood(food: food,)));
-                },
-              );
-            },
-          );
-        }
-      }),
     );
   }
 }

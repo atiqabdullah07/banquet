@@ -1,4 +1,4 @@
-// ignore_for_file: unused_field
+// ignore_for_file: unused_field, unnecessary_null_comparison, use_build_context_synchronously
 
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
@@ -8,12 +8,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class BookingRequests extends StatelessWidget {
+class BookingRequests extends StatefulWidget {
   BookingRequests({super.key});
 
+  @override
+  State<BookingRequests> createState() => _BookingRequestsState();
+}
+
+class _BookingRequestsState extends State<BookingRequests> {
   final BanquetController _banquetController = Get.put(BanquetController());
+
   final BanquetProfileController _banquetProfileController =
       Get.put(BanquetProfileController());
+
+  @override
+  void initState() {
+    super.initState();
+    _banquetController.fetchBookingRequests();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,25 +43,42 @@ class BookingRequests extends StatelessWidget {
             child: Text('No Booking Requests'),
           );
         } else {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: ListView.builder(
-              itemCount: _banquetController.bookingRequests.length,
-              itemBuilder: (context, index) {
-                var request = _banquetController.bookingRequests[index];
-                return bookingRequestCard(
-                    bookingPrice: request.bookingPrice,
-                    menu: request.menu,
-                    guests: request.guests,
-                    timeSlot: request.timeSlot,
-                    date: request.date,
-                    customerName: request.customer.name!,
-                    onAccept: () async {
-                      await _banquetController.acceptBooking(request.uid);
-                      await _banquetController.fetchBookingRequests();
-                    },
-                    onDecline: () {});
-              },
+          return RefreshIndicator(
+            backgroundColor: AppColors.backgroundColor,
+            color: AppColors.primaryColor,
+            onRefresh: () async {
+              await _banquetController.fetchBookingRequests();
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: ListView.builder(
+                itemCount: _banquetController.bookingRequests.length,
+                itemBuilder: (context, index) {
+                  var request = _banquetController.bookingRequests[index];
+                  return bookingRequestCard(
+                      bookingPrice: request.bookingPrice,
+                      menu: request.menu,
+                      customerPic: request.customer.profilePhoto.toString(),
+                      guests: request.guests,
+                      timeSlot: request.timeSlot,
+                      date: request.date,
+                      customerName: request.customer.name!,
+                      onAccept: () async {
+                        bool isAccepted =
+                            await _banquetController.acceptBooking(request.uid);
+
+                        if (isAccepted == true) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => CustomDialogWidget(
+                                title: 'Request Accepted',
+                                message: 'Booking Request has been Accepted'),
+                          );
+                        }
+                      },
+                      onDecline: () {});
+                },
+              ),
             ),
           );
         }
@@ -62,6 +91,7 @@ Widget bookingRequestCard({
   required VoidCallback onAccept,
   required VoidCallback onDecline,
   required String customerName,
+  required String customerPic,
   required String bookingPrice,
   required String menu,
   required String guests,
@@ -89,11 +119,18 @@ Widget bookingRequestCard({
               children: [
                 Row(
                   children: [
-                    CircleAvatar(
-                      radius: 20.r,
-                      backgroundColor: AppColors.secondaryColor,
-                      child: const Icon(Icons.person),
-                    ),
+                    customerPic == '' || customerName == null
+                        ? CircleAvatar(
+                            radius: 20.r,
+                            backgroundColor: AppColors.secondaryColor,
+                            child: const Icon(Icons.person),
+                          )
+                        : CircleAvatar(
+                            radius: 20.r,
+                            backgroundColor: AppColors.secondaryColor,
+                            backgroundImage:
+                                NetworkImage(customerPic.toString()),
+                          ),
                     SizedBox(
                       width: 10.w,
                     ),

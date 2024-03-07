@@ -5,7 +5,7 @@ import 'package:banquet/App%20Constants/helper_functions.dart';
 import 'package:banquet/Controllers/auth_controller.dart';
 import 'package:banquet/Controllers/customer_controller.dart';
 import 'package:banquet/Views/Screens/Auth/select_categorey.dart';
-import 'package:banquet/Views/Screens/Customer/Bookings/bookings.dart';
+
 import 'package:banquet/Views/Screens/Customer/My%20Profile/edit_customer_profile.dart';
 
 import 'package:banquet/Views/Screens/Customer/My%20Profile/my_profile_widgets.dart';
@@ -135,10 +135,10 @@ class _MyProfileState extends State<MyProfile> {
                 profileButton(
                     title: 'Bookings',
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MyBookings()));
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => const MyBookings()));
                     }),
                 height(100),
               ],

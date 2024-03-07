@@ -3,9 +3,16 @@ import 'package:banquet/Views/Screens/Chats/chats_widgets.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
-class ChatsScreen extends StatelessWidget {
-  ChatsScreen({super.key});
+class ChatsScreen extends StatefulWidget {
+  const ChatsScreen({super.key});
+
+  @override
+  State<ChatsScreen> createState() => _ChatsScreenState();
+}
+
+class _ChatsScreenState extends State<ChatsScreen> {
   final TextEditingController messageController = TextEditingController();
+
   var messages = [
     Messages(message: 'Yes it is', isSenderMe: true),
     Messages(message: 'Is it availaible on Monday', isSenderMe: false),

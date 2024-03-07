@@ -6,29 +6,47 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class Events extends StatelessWidget {
-  Events({super.key});
+class Events extends StatefulWidget {
+  const Events({super.key});
 
+  @override
+  State<Events> createState() => _EventsState();
+}
+
+class _EventsState extends State<Events> {
   final CustomerController _customerController = Get.put(CustomerController());
 
   @override
+  void initState() {
+    super.initState();
+    _customerController.fetchEvents();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: AppColors.backgroundColor,
-        appBar: AppBar(
+    return RefreshIndicator(
+      backgroundColor: AppColors.backgroundColor,
+      color: AppColors.primaryColor,
+      onRefresh: () async {
+        _customerController.fetchEvents();
+      },
+      child: Scaffold(
           backgroundColor: AppColors.backgroundColor,
-          title: const Text('Upcomming Events'),
-        ),
-        body: Obx(() {
-          return ListView.builder(
-            itemCount: _customerController.allEvents.length,
-            itemBuilder: (context, index) {
-              return EventsCard(
-                event: _customerController.allEvents[index],
-              );
-            },
-          );
-        }));
+          appBar: AppBar(
+            backgroundColor: AppColors.backgroundColor,
+            title: const Text('Upcoming Events'),
+          ),
+          body: Obx(() {
+            return ListView.builder(
+              itemCount: _customerController.allEvents.length,
+              itemBuilder: (context, index) {
+                return EventsCard(
+                  event: _customerController.allEvents[index],
+                );
+              },
+            );
+          })),
+    );
   }
 }
 
@@ -105,7 +123,7 @@ class EventsCard extends StatelessWidget {
                                   maxLines: 1,
                                   style: const TextStyle(
                                       color: AppColors.black,
-                                      fontSize: 18,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.w500),
                                 ),
                               ),

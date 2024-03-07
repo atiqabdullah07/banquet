@@ -296,7 +296,8 @@ class BanquetController extends GetxController {
     return isAdded;
   }
 
-  Future<void> sendBookingRequest(Reservation booking, String banquetID) async {
+  Future<bool> sendBookingRequest(Reservation booking, String banquetID) async {
+    bool isBooked = false;
     try {
       easyLoading();
       await firestore
@@ -308,14 +309,15 @@ class BanquetController extends GetxController {
           );
 
       EasyLoading.dismiss();
-      Get.snackbar('Success', 'Menu Added Successfully');
+      isBooked = true;
 
-      log('Menu added successfully');
+      log('Request Sent successfully');
     } catch (e) {
       EasyLoading.dismiss();
-      log('Error adding menu: $e');
+      log('Error sending Request: $e');
       rethrow;
     }
+    return isBooked;
   }
 
   Future<bool> updateBanquetInfoForCurrentUser(
@@ -381,7 +383,8 @@ class BanquetController extends GetxController {
     return isUpdated;
   }
 
-  Future<void> acceptBooking(String bookingUid) async {
+  Future<bool> acceptBooking(String bookingUid) async {
+    bool isAccepted = false;
     try {
       CollectionReference banquetCollection =
           FirebaseFirestore.instance.collection('banquet');
@@ -407,7 +410,9 @@ class BanquetController extends GetxController {
         // Remove the booking request from the 'bookingRequests' subcollection
         await bookingRequestDoc.reference.delete();
         EasyLoading.dismiss();
-        await fetchBookings();
+        fetchBookings();
+        await fetchBookingRequests();
+        isAccepted = true;
       } else {
         log('Booking request not found');
         EasyLoading.dismiss();
@@ -416,6 +421,7 @@ class BanquetController extends GetxController {
       log('Error moving booking: $e');
       rethrow;
     }
+    return isAccepted;
   }
 }
 

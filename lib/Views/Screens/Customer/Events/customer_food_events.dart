@@ -8,31 +8,50 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class CustomerFoodEvents extends StatelessWidget {
-  CustomerFoodEvents({super.key});
+class CustomerFoodEvents extends StatefulWidget {
+  const CustomerFoodEvents({super.key});
 
+  @override
+  State<CustomerFoodEvents> createState() => _CustomerFoodEventsState();
+}
+
+class _CustomerFoodEventsState extends State<CustomerFoodEvents> {
   final CustomerController _customerController = Get.put(CustomerController());
 
   @override
+  void initState() {
+    super.initState();
+
+    _customerController.fetchFoods();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Food Events'),
+    return RefreshIndicator(
+      color: AppColors.primaryColor,
+      backgroundColor: Colors.white,
+      onRefresh: () async {
+        _customerController.fetchFoods();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Food Events'),
+        ),
+        body: Obx(() {
+          return ListView.builder(
+            itemCount: _customerController.myFoods.length,
+            itemBuilder: (context, index) {
+              var food = _customerController.myFoods[index];
+              return BanquetFoodsCard(
+                  food: FoodModel(
+                      banquetname: food.banquetname,
+                      title: food.title,
+                      content: food.content,
+                      date: food.date));
+            },
+          );
+        }),
       ),
-      body: Obx(() {
-        return ListView.builder(
-          itemCount: _customerController.myFoods.length,
-          itemBuilder: (context, index) {
-            var food = _customerController.myFoods[index];
-            return BanquetFoodsCard(
-                food: FoodModel(
-                    banquetname: food.banquetname,
-                    title: food.title,
-                    content: food.content,
-                    date: food.date));
-          },
-        );
-      }),
     );
   }
 }

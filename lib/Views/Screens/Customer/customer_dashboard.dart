@@ -46,7 +46,9 @@ class _CustomerDashboardState extends State<CustomerDashboard> {
             return RefreshIndicator(
               color: AppColors.primaryColor,
               backgroundColor: Colors.white,
-              onRefresh: () async {},
+              onRefresh: () async {
+                await _customerController.fetchBanquets();
+              },
               child: SingleChildScrollView(
                   child: Column(
                 children: [
@@ -96,15 +98,20 @@ class _CustomerDashboardState extends State<CustomerDashboard> {
                             "Hello!",
                             style: TextStyle(
                               color: AppColors.black.withOpacity(0.5),
-                              fontSize: 20,
+                              fontSize: 16,
                             ),
                           ),
                           Text(
                             _customerProfileController.customer.value.name
-                                .toString(),
+                                        .toString()
+                                        .length >
+                                    10
+                                ? '${_customerProfileController.customer.value.name.toString().substring(0, 10)}...'
+                                : _customerProfileController.customer.value.name
+                                    .toString(),
                             style: const TextStyle(
                                 color: AppColors.black,
-                                fontSize: 20,
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -236,15 +243,7 @@ class _CustomerDashboardState extends State<CustomerDashboard> {
                       servicesButton(
                           icon: 'assets/icons/Recomendations.png',
                           title: 'Recomendations',
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => CustomDialogWidget(
-                                  title: 'Success',
-                                  isFailure: true,
-                                  message: 'Post Uploaded Successfully'),
-                            );
-                          }),
+                          onTap: () {}),
                     ],
                   ),
                   SizedBox(

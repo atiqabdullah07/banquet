@@ -1,6 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:developer';
+
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/Controllers/customer_controller.dart';
 import 'package:banquet/Models/banquet_model.dart';
+import 'package:banquet/Views/Widgets/common_widgets.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -17,19 +23,42 @@ class Wishlist extends StatelessWidget {
         title: const Text('My Wishlist'),
       ),
       body: Obx(() {
-        return ListView.builder(
-          itemCount: _customerController.myWishlist.length,
-          itemBuilder: (context, index) {
-            var banquet = _customerController.myWishlist[index];
-            return whishlistCard(banquet: banquet);
-          },
-        );
+        if (_customerController.myWishlist.isEmpty) {
+          return const Center(
+            child: Text('Nothing in Wishlist'),
+          );
+        } else {
+          return ListView.builder(
+            itemCount: _customerController.myWishlist.length,
+            itemBuilder: (context, index) {
+              var banquet = _customerController.myWishlist[index];
+              return whishlistCard(
+                  banquet: banquet,
+                  onDelete: () async {
+                    bool isDeleted = await _customerController
+                        .removeFromWishlist(id: banquet.uid.toString());
+
+                    log('Is Deleted: ${isDeleted.toString()}');
+
+                    if (isDeleted == true) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => CustomDialogWidget(
+                            title: 'Banquet Removed',
+                            message: 'Banquet Removed Sucessfully'),
+                      );
+                    }
+                  });
+            },
+          );
+        }
       }),
     );
   }
 }
 
-Widget whishlistCard({required Banquet banquet}) {
+Widget whishlistCard(
+    {required Banquet banquet, required VoidCallback onDelete}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
     child: Container(
@@ -111,11 +140,12 @@ Widget whishlistCard({required Banquet banquet}) {
         Padding(
           padding: EdgeInsets.only(right: 10.w),
           child: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.delete,
-                color: AppColors.secondaryColor,
-              )),
+            onPressed: onDelete,
+            icon: const Icon(
+              Icons.delete,
+              color: AppColors.secondaryColor,
+            ),
+          ),
         )
       ]),
     ),

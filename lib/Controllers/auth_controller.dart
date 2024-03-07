@@ -9,7 +9,6 @@ import 'package:banquet/Models/banquet_model.dart';
 import 'package:banquet/Models/customer_model.dart';
 import 'package:banquet/Views/Screens/Auth/login.dart';
 
-import 'package:banquet/Views/Screens/Customer/customer_home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';

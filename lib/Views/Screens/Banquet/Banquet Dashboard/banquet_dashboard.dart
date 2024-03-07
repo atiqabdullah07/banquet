@@ -1,7 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
+import 'package:banquet/Controllers/auth_controller.dart';
 import 'package:banquet/Controllers/banquet_controller.dart';
 import 'package:banquet/Models/banquet_model.dart';
+import 'package:banquet/Views/Screens/Auth/select_categorey.dart';
 
 import 'package:banquet/Views/Screens/Banquet/Booking%20Request/booking_requests.dart';
 import 'package:banquet/Views/Screens/Banquet/Events/banquet_events.dart';
@@ -23,6 +27,7 @@ class _BanquetDashboardState extends State<BanquetDashboard> {
   final BanquetController _banquetController = Get.put(BanquetController());
   final BanquetProfileController _banquetProfileController =
       Get.put(BanquetProfileController());
+  final AuthController _authController = Get.put(AuthController());
   Banquet? banquet;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -60,30 +65,64 @@ class _BanquetDashboardState extends State<BanquetDashboard> {
                   ),
                 ),
               ),
-              ListTile(
-                title: const Text('Event Posts'),
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => BanquetEvents()));
-                },
-              ),
-              ListTile(
-                title: const Text('Food Posts'),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => BanquetFoodEvents()));
-                },
-              ),
-              ListTile(
-                title: const Text('Advertisements'),
-                onTap: () {},
-              ),
-              ListTile(
-                title: const Text('History'),
-                onTap: () {},
-              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Column(
+                    children: [
+                      ListTile(
+                        title: const Text('Event Posts'),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BanquetEvents()));
+                        },
+                      ),
+                      ListTile(
+                        title: const Text('Food Posts'),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BanquetFoodEvents()));
+                        },
+                      ),
+                      ListTile(
+                        title: const Text('Advertisements'),
+                        onTap: () {},
+                      ),
+                      ListTile(
+                        title: const Text('History'),
+                        onTap: () {},
+                      ),
+                    ],
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      var isLogOut = await _authController.signOut();
+                      if (isLogOut == true) {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                              builder: (context) => const CategoreyPage()),
+                        );
+                      }
+                    },
+                    child: const Row(
+                      children: [
+                        Icon(
+                          Icons.logout,
+                          color: Colors.red,
+                        ),
+                        Text(
+                          'Log Out',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
         ),

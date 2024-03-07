@@ -12,6 +12,7 @@ class Conversations extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Conversations'),
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -22,8 +23,10 @@ class Conversations extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 15),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ChatsScreen()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ChatsScreen()));
                 },
                 child: Row(
                   children: [

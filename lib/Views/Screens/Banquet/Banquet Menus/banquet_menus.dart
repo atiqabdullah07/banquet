@@ -1,7 +1,7 @@
 // ignore_for_file: unnecessary_null_comparison, use_build_context_synchronously
 
 import 'package:banquet/App%20Constants/constants.dart';
-import 'package:banquet/App%20Constants/helper_functions.dart';
+
 import 'package:banquet/Controllers/banquet_controller.dart';
 import 'package:banquet/Models/menu_model.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
@@ -49,7 +49,6 @@ class _AddMenuState extends State<AddMenu> {
                       padding: EdgeInsets.only(top: 10.h, bottom: 20.h),
                       child: TextFormField(
                         controller: _packageNameController,
-                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           hintText: 'Enter Package Name',
                           hintStyle: TextStyle(
