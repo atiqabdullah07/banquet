@@ -3,7 +3,9 @@
 import 'package:banquet/App%20Constants/constants.dart';
 import 'package:banquet/App%20Constants/helper_functions.dart';
 import 'package:banquet/Controllers/banquet_controller.dart';
+import 'package:banquet/Views/Screens/Chats/chat_screen.dart';
 import 'package:banquet/Views/Widgets/common_widgets.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -76,7 +78,17 @@ class _BookingRequestsState extends State<BookingRequests> {
                           );
                         }
                       },
-                      onDecline: () {});
+                      onDecline: () {},
+                      onMessageButtonTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChatsScreen(
+                                      receiverID: request.customer.uid!,
+                                      receiverEmail: request.customer.email!,
+                                      username: request.customer.name!,
+                                    )));
+                      });
                 },
               ),
             ),
@@ -97,6 +109,7 @@ Widget bookingRequestCard({
   required String guests,
   required String timeSlot,
   required String date,
+  required VoidCallback onMessageButtonTap,
 }) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 20),
@@ -141,7 +154,7 @@ Widget bookingRequestCard({
                   ],
                 ),
                 IconButton(
-                    onPressed: () {},
+                    onPressed: onMessageButtonTap,
                     icon: const Icon(
                       Icons.chat,
                       color: AppColors.primaryColor,

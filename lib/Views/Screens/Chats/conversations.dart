@@ -23,10 +23,10 @@ class Conversations extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 15),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ChatsScreen()));
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => const ChatsScreen()));
                 },
                 child: Row(
                   children: [
