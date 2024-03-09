@@ -35,3 +35,28 @@ class Message {
     };
   }
 }
+
+class Conversation {
+  final String senderId;
+
+  final String receiverId;
+
+  Conversation({
+    required this.senderId,
+    required this.receiverId,
+  });
+
+  factory Conversation.fromJson(Map<String, dynamic> json) {
+    return Conversation(
+      senderId: json['senderId'] as String,
+      receiverId: json['receiverId'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'senderId': senderId,
+      'receiverId': receiverId,
+    };
+  }
+}

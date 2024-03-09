@@ -24,36 +24,20 @@ class _ChatsScreenState extends State<ChatsScreen> {
 
   final ChatsController _chatsController = Get.put(ChatsController());
 
-  var messages = [
-    Messages(message: 'Yes it is', isSenderMe: true),
-    Messages(message: 'Is it availaible on Monday', isSenderMe: false),
-    Messages(message: 'Yes please', isSenderMe: true),
-    Messages(message: 'I want some information', isSenderMe: false),
-    Messages(message: 'Ok then i wanna book for one day', isSenderMe: false),
-    Messages(message: 'Yes it is', isSenderMe: true),
-    Messages(message: 'Is it availaible on Monday', isSenderMe: false),
-    Messages(message: 'Yes please', isSenderMe: true),
-    Messages(message: 'I want some information', isSenderMe: false),
-    Messages(message: 'Ok then i wanna book for one day', isSenderMe: false),
-    Messages(message: 'Yes it is', isSenderMe: true),
-    Messages(message: 'Is it availaible on Monday', isSenderMe: false),
-    Messages(message: 'Yes please', isSenderMe: true),
-    Messages(message: 'I want some information', isSenderMe: false),
-    Messages(message: 'Ok then i wanna book for one day', isSenderMe: false),
-    Messages(message: 'Yes it is', isSenderMe: true),
-    Messages(message: 'Is it availaible on Monday', isSenderMe: false),
-    Messages(message: 'Yes please', isSenderMe: true),
-    Messages(message: 'I want some information', isSenderMe: false),
-  ];
-
   void sendMessage() async {
     print('Method Called');
     if (_messageController.text.isNotEmpty) {
-      await _chatsController.sendMessage(
+      _chatsController.sendMessage(
           receiverID: widget.receiverID, message: _messageController.text);
-
       _messageController.clear();
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(widget.receiverID);
   }
 
   Widget _buildTextComposer() {
@@ -89,6 +73,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
   @override
   Widget build(BuildContext context) {
     String senderId = firebaseAuth.currentUser!.uid;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.username.toString()),
@@ -105,16 +90,13 @@ class _ChatsScreenState extends State<ChatsScreen> {
                       builder: (context, snapshot) {
                         // Errors
                         if (snapshot.hasError) {
-                          return const Text('Error');
+                          return const Center(child: Text('Error'));
                         }
-                        // Loading
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Text('Loading');
-                        }
+
                         // List virw
 
                         return ListView(
+                          reverse: true,
                           children: snapshot.data!.docs
                               .map((doc) => buildMessageItem(doc))
                               .toList(),
@@ -158,15 +140,17 @@ class Messages {
 
 Widget buildMessageItem(DocumentSnapshot doc) {
   Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+  String senderId = firebaseAuth.currentUser!.uid;
+
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 10),
     child: Align(
-      // alignment: messages[index].isSenderMe == true
-      //     ? Alignment.centerLeft
-      //     : Alignment.centerRight,
+      alignment: senderId == data['senderId']
+          ? Alignment.centerLeft
+          : Alignment.centerRight,
       child: MessageBubble(
         text: data['message'],
-        isSenderMe: true,
+        isSenderMe: senderId == data['senderId'],
       ),
     ),
   );

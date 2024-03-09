@@ -35,8 +35,11 @@ class MessageBubble extends StatelessWidget {
             ? AppColors.secondaryColor
             : AppColors.black.withOpacity(0.1),
       ),
-      child: Center(
-        child: Text(text),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        child: Center(
+          child: Text(text),
+        ),
       ),
     );
   }

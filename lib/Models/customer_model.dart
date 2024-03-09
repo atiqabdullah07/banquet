@@ -21,3 +21,12 @@ class Customer {
         uid: json['uid']);
   }
 }
+
+class ConversationUser {
+  String? name;
+  String? profilePhoto;
+
+  String? uid;
+
+  ConversationUser({this.name, this.profilePhoto, this.uid});
+}
